@@ -2,53 +2,76 @@ import React, {Component} from 'react';
 import './App.css';
 import Login from './components/Login.js';
 import Homepage from './components/Homepage.js';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import Signup from './components/Signup.js';
 
 class App extends Component {
   state = {
     loggedIn: false,
-    currentUser: {}
+    currentUser: {},
+    currentUserTeam: {},
+    allUsers: []
   }
 
-  // SUNDAY TODO:
+  // TUESDAY TODO:
   /*
-  1. make signup page
-  2. investigate routing
-  3. have link to signup page below login form
+  1. Get players associated with a team
+  2. Displayer players
+  3. make signup page
   4. build signup to send new user to backend
-  5. build findUser method to find a user in the backend when logging in
-  6. start building homepage
+  5. navbar
   */
 
   // when component mounts 
 
   logIn = (userObj) => {
-    this.setState({currentUser: userObj})
+    let currentUserObj = this.state.allUsers.find(user => userObj.username ===  user.name)
+  
+    this.setState({currentUser: currentUserObj})
+    
     this.setState({loggedIn: true})
+
+    // this.getUserTeam(this.state.currentUser.id)
   }
 
-  findUser = (event, username) => {
-    event.preventDefault();
+  componentDidMount() {
+    //store all current users from db in state
+    fetch('http://localhost:3001/users')
+    .then(resp => resp.json())
+    .then(data => this.setState({allUsers: data}))
+  }
 
-    // for now, just store user in currentUser state
-    // refactor to find user in backend and put that userObj in state
-    // will have to make an allUsers state obj
-    // take care of this on sunday
-    // store allUsers in state temporarily -> this will become slower as more users are added
+  getUserTeam = (userID) => {
+    fetch('http://localhost:3001/teams')
+    .then(resp => resp.json())
+    .then(data => this.setState({currentUserTeam: data.filter(team => team.user_id === userID)}))
+  }
 
-    // let currentUserObj = this.state.allUsers.find(user => user.username === username)
-    // console.log('current user obj', currentUserObj)
-
-    // this.getUserPosts(currentUserObj.id)
-    // this.getUserCaptions(currentUserObj.id)
-    
-    // this.setState({currentUser: {...this.state.currentUser, userID: currentUserObj.id, username: currentUserObj.username}})
+  getTeamPlayers = (teamID) => {
+    fetch('http://localhost:3001/players')
+    .then(resp => resp.json())
+    .then(data => this.setState({currentUser: {...this.state.currentUser, players: data.filter(player => player.team_id === teamID)}}))
   }
   
   render()
   {
     return (
       <div>
-        {this.state.loggedIn ? <Homepage user={this.state.currentUser}/> : <Login logIn={this.logIn} />}
+        <Router>
+        <div>
+          <Route exact path='/homepage'>
+            <Homepage currentUser={this.state.currentUser} getUserTeam={this.getUserTeam}/>
+          </Route>
+          <Route exact path='/signup'>
+            <Signup />
+          </Route>
+          <Route exact path='/'>
+            {this.state.loggedIn ? <Redirect to={{
+              pathname:'/homepage'
+              }} /> : <Login logIn={this.logIn} />}
+          </Route>
+        </div>
+        </Router>
       </div>
     );
   }
