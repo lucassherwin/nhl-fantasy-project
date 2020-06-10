@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { NavLink } from 'react-router-dom'
+// import { BrowserRouter as Router, Route, Redirect, NavLink } from 'react-router-dom';
 
 export class Login extends Component {
     state = {
@@ -21,6 +23,7 @@ export class Login extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         this.props.logIn(this.state.user)
+
         console.log('log in')
     }
 
@@ -41,7 +44,7 @@ export class Login extends Component {
                         <input type='submit' name='login' value='Login' onClick={(event) => this.handleSubmit(event)} />
                     </form>
                 </div>
-                
+                <NavLink exact to='/signup'>Sign Up</NavLink>
             </div>
         )
     }

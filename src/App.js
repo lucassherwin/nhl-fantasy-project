@@ -2,53 +2,83 @@ import React, {Component} from 'react';
 import './App.css';
 import Login from './components/Login.js';
 import Homepage from './components/Homepage.js';
+import { Route, Redirect, Switch } from 'react-router-dom';
+import Signup from './components/Signup.js';
+import PlayerPage from './components/PlayerPage.js'
+import Navbar from './components/Navbar.js';
 
 class App extends Component {
   state = {
     loggedIn: false,
-    currentUser: {}
+    currentUser: {},
+    allUsers: [],
+    currentPlayer: null,
+    userTeam: []
   }
 
-  // SUNDAY TODO:
-  /*
-  1. make signup page
-  2. investigate routing
-  3. have link to signup page below login form
-  4. build signup to send new user to backend
-  5. build findUser method to find a user in the backend when logging in
-  6. start building homepage
-  */
-
-  // when component mounts 
-
   logIn = (userObj) => {
-    this.setState({currentUser: userObj})
+    let currentUserObj = this.state.allUsers.find(user => userObj.username ===  user.name)
+  
+    this.setState({currentUser: currentUserObj})
+    
     this.setState({loggedIn: true})
   }
 
-  findUser = (event, username) => {
-    event.preventDefault();
+  setCurrentPlayer = (player) => {
+    this.setState({currentPlayer: player})
+  }
 
-    // for now, just store user in currentUser state
-    // refactor to find user in backend and put that userObj in state
-    // will have to make an allUsers state obj
-    // take care of this on sunday
-    // store allUsers in state temporarily -> this will become slower as more users are added
+  addPlayerToUserTeam = (player) => {
+    let teamArr = this.state.userTeam
+    teamArr.push(player)
 
-    // let currentUserObj = this.state.allUsers.find(user => user.username === username)
-    // console.log('current user obj', currentUserObj)
+    this.setState({userTeam: teamArr})
+    alert(player.name, 'has been added to your team')
+    console.log('app userTeam', this.state.userTeam)
+    //this will set userTeam
+  }
 
-    // this.getUserPosts(currentUserObj.id)
-    // this.getUserCaptions(currentUserObj.id)
-    
-    // this.setState({currentUser: {...this.state.currentUser, userID: currentUserObj.id, username: currentUserObj.username}})
+  componentDidMount() {
+    //store all current users from db in state
+    fetch('http://localhost:3001/users')
+    .then(resp => resp.json())
+    .then(data => this.setState({allUsers: data}))
   }
   
   render()
   {
     return (
       <div>
-        {this.state.loggedIn ? <Homepage user={this.state.currentUser}/> : <Login logIn={this.logIn} />}
+        {/* <Router> */}
+        <Navbar />
+        <div>
+        <Switch>
+        {/* <Route exact path='playerPage/:id' component={PlayerPage} />          */}
+            <Route exact path='/playerPage/:id' >
+              {/* {this.state.playerObj !== null ? <PlayerPage /> : null} */}
+              <PlayerPage setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} addPlayerToUserTeam={this.addPlayerToUserTeam}/>
+          </Route>
+          {/* <Route exact path='/homepage' >
+            <Homepage currentUser={this.state.currentUser} getUserTeam={this.getUserTeam} setPlayerObj={this.setPlayerObj} />
+          </Route> */}
+          <Route exact path='/homepage' render={(props) => <Homepage {...props} currentUser={this.state.currentUser}
+          setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} userTeam={this.state.userTeam}/>}
+          />
+          {/* <Route exact path='/signup'>
+            <Signup />
+          </Route> */}
+          <Route exact path='/signup' component={Signup} />
+          <Route exact path='/'>
+            {this.state.loggedIn ? <Redirect to={{
+              pathname:'/homepage'
+              }} /> : <Login logIn={this.logIn} />}
+          </Route>
+          {/* {this.state.loggedIn ? <Redirect to={{
+              pathname:'/homepage'
+              }} /> : <Login logIn={this.logIn} />} */}
+          </Switch>
+        </div>
+        {/* </Router> */}
       </div>
     );
   }
