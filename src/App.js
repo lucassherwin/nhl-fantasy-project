@@ -2,27 +2,18 @@ import React, {Component} from 'react';
 import './App.css';
 import Login from './components/Login.js';
 import Homepage from './components/Homepage.js';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import Signup from './components/Signup.js';
+import PlayerPage from './components/PlayerPage.js'
 
 class App extends Component {
   state = {
     loggedIn: false,
     currentUser: {},
-    currentUserTeam: {},
-    allUsers: []
+    allUsers: [],
+    currentPlayer: null,
+    userTeam: []
   }
-
-  // TUESDAY TODO:
-  /*
-  1. Get players associated with a team
-  2. Displayer players
-  3. make signup page
-  4. build signup to send new user to backend
-  5. navbar
-  */
-
-  // when component mounts 
 
   logIn = (userObj) => {
     let currentUserObj = this.state.allUsers.find(user => userObj.username ===  user.name)
@@ -30,8 +21,19 @@ class App extends Component {
     this.setState({currentUser: currentUserObj})
     
     this.setState({loggedIn: true})
+  }
 
-    // this.getUserTeam(this.state.currentUser.id)
+  setCurrentPlayer = (player) => {
+    this.setState({currentPlayer: player})
+  }
+
+  addPlayerToUserTeam = (player) => {
+    let teamArr = this.state.userTeam
+    teamArr.push(player)
+
+    this.setState({userTeam: teamArr})
+    console.log('app userTeam', this.state.userTeam)
+    //this will set userTeam
   }
 
   componentDidMount() {
@@ -40,38 +42,41 @@ class App extends Component {
     .then(resp => resp.json())
     .then(data => this.setState({allUsers: data}))
   }
-
-  getUserTeam = (userID) => {
-    fetch('http://localhost:3001/teams')
-    .then(resp => resp.json())
-    .then(data => this.setState({currentUserTeam: data.filter(team => team.user_id === userID)}))
-  }
-
-  getTeamPlayers = (teamID) => {
-    fetch('http://localhost:3001/players')
-    .then(resp => resp.json())
-    .then(data => this.setState({currentUser: {...this.state.currentUser, players: data.filter(player => player.team_id === teamID)}}))
-  }
   
   render()
   {
     return (
       <div>
-        <Router>
+        {/* <Router> */}
         <div>
-          <Route exact path='/homepage'>
-            <Homepage currentUser={this.state.currentUser} getUserTeam={this.getUserTeam}/>
+        <Switch>
+        {/* <Route exact path='playerPage/:id' component={PlayerPage} />          */}
+            <Route exact path='/playerPage/:id' >
+              {/* {this.state.playerObj !== null ? <PlayerPage /> : null} */}
+              <PlayerPage setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} addPlayerToUserTeam={this.addPlayerToUserTeam}/>
           </Route>
-          <Route exact path='/signup'>
+          {/* <Route exact path='/homepage' >
+            <Homepage currentUser={this.state.currentUser} getUserTeam={this.getUserTeam} setPlayerObj={this.setPlayerObj} />
+          </Route> */}
+          <Route exact path='/homepage' render={(props) => <Homepage {...props} currentUser={this.state.currentUser}
+          getUserTeam={this.getUserTeam} setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer}/>} 
+          userTeam={this.state.userTeam}
+          />
+          {/* <Route exact path='/signup'>
             <Signup />
-          </Route>
+          </Route> */}
+          <Route exact path='/signup' component={Signup} />
           <Route exact path='/'>
             {this.state.loggedIn ? <Redirect to={{
               pathname:'/homepage'
               }} /> : <Login logIn={this.logIn} />}
           </Route>
+          {/* {this.state.loggedIn ? <Redirect to={{
+              pathname:'/homepage'
+              }} /> : <Login logIn={this.logIn} />} */}
+          </Switch>
         </div>
-        </Router>
+        {/* </Router> */}
       </div>
     );
   }
