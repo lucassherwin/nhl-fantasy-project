@@ -21,7 +21,7 @@ export class PlayerTeam extends Component {
     }
 
     render() {
-        let {setCurrentPlayer} = this.props
+        let {setCurrentPlayer, userTeam} = this.props
         return (
             <div>
                 <h1>Available Players</h1>
@@ -35,7 +35,9 @@ export class PlayerTeam extends Component {
                 <h1>User Team</h1>
                 <div>
                     <ul>
-                        {this.props.userTeam !== undefined ? console.log('in PlayerTeam', this.props.userTeam) : null}
+                        {userTeam.length !== 0 ? userTeam.map((player, index) => (
+                            <li key={index}>{player.name}</li>
+                        )) : null}
                     </ul>
                 </div>
             </div>
@@ -44,7 +46,3 @@ export class PlayerTeam extends Component {
 }
 
 export default PlayerTeam
-
-{/* this.props.userTeam.map((player, index) => (
-                            <li key={index}>{player.name}</li>
-                        )) : null} */}

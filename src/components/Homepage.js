@@ -14,6 +14,8 @@ export class Homepage extends Component {
     }
 
     render() {
+        let { userTeam, currentUser } = this.props
+        console.log('in homepage ', this.props)
         return (
             <div>
                 <h1>Homepage</h1>
@@ -23,7 +25,8 @@ export class Homepage extends Component {
                         {/* <h2>{this.state.team.name}</h2> */}
                         <p>Team stats here</p>
                     </div>
-                {this.state.team !== null ? <PlayerTeam setCurrentPlayer={this.props.setCurrentPlayer} team={this.state.team} userTeam={this.props.userTeam}/> : null }
+                {this.state.team !== null ? <PlayerTeam setCurrentPlayer={this.props.setCurrentPlayer} team={this.state.team}
+                userTeam={userTeam}/> : null }
             </div>
         )
     }
