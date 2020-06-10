@@ -27,9 +27,9 @@ export class PlayerTeam extends Component {
                 <h1>Available Players</h1>
                 <div>
                     <ul>
+                    {console.log('playerTeam user team', userTeam)}
                         {this.state.players !== null ? this.state.players.map((player, index) => (
-                            <li key={index} onClick={() => setCurrentPlayer(player)}><NavLink to={`playerPage/${player.id}` }>{player.name}</NavLink></li>
-                        )) : null}
+                            userTeam.some(p => p.name === player.name) ? null : <li key={index} onClick={() => setCurrentPlayer(player)}><NavLink to={`playerPage/${player.id}` }>{player.name}</NavLink></li>)) : null}
                     </ul>
                 </div>
                 <h1>User Team</h1>

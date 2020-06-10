@@ -14,7 +14,7 @@ export class Homepage extends Component {
     }
 
     render() {
-        let { userTeam, currentUser } = this.props
+        let { userTeam } = this.props
         console.log('in homepage ', this.props)
         return (
             <div>
