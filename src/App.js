@@ -13,7 +13,11 @@ class App extends Component {
     currentUser: {},
     allUsers: [],
     currentPlayer: null,
-    userTeam: []
+    userTeam: {
+      team: [],
+      name: '',
+      location: ''
+    }
   }
 
   logIn = (userObj) => {
@@ -29,13 +33,17 @@ class App extends Component {
   }
 
   addPlayerToUserTeam = (player) => {
-    let teamArr = this.state.userTeam
+    let teamArr = this.state.userTeam.team
     teamArr.push(player)
 
-    this.setState({userTeam: teamArr})
-    alert(player.name, 'has been added to your team')
-    console.log('app userTeam', this.state.userTeam)
+    this.setState({userTeam: {...this.state.userTeam, team: teamArr}})
+    alert(`${player.name} has been added to your team`)
     //this will set userTeam
+  }
+
+  createUserTeam = (event, name, location) => {
+    // event.preventDefault();
+    this.setState({userTeam: {...this.state.userTeam, name: name, location: location}})
   }
 
   componentDidMount() {
@@ -62,7 +70,7 @@ class App extends Component {
             <Homepage currentUser={this.state.currentUser} getUserTeam={this.getUserTeam} setPlayerObj={this.setPlayerObj} />
           </Route> */}
           <Route exact path='/homepage' render={(props) => <Homepage {...props} currentUser={this.state.currentUser}
-          setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} userTeam={this.state.userTeam}/>}
+          setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} userTeam={this.state.userTeam} createUserTeam={this.createUserTeam}/>}
           />
           {/* <Route exact path='/signup'>
             <Signup />
