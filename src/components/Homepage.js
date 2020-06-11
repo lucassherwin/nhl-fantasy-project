@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
-import PlayerTeam from './PlayerTeam.js'
+import React, { Component } from 'react';
+import PlayerTeam from './PlayerTeam.js';
+import CreateTeam from './CreateTeam.js';
 
 export class Homepage extends Component {
     state = {
@@ -14,8 +15,7 @@ export class Homepage extends Component {
     }
 
     render() {
-        let { userTeam } = this.props
-        console.log('in homepage ', this.props)
+        let { userTeam, createUserTeam } = this.props
         return (
             <div>
                 <h1>Homepage</h1>
@@ -27,6 +27,19 @@ export class Homepage extends Component {
                     </div>
                 {this.state.team !== null ? <PlayerTeam setCurrentPlayer={this.props.setCurrentPlayer} team={this.state.team}
                 userTeam={userTeam}/> : null }
+                
+                <div>
+                <h1>User Team</h1>
+                <h2>{userTeam.name !== '' ? userTeam.name : null}</h2>
+                <h3>{userTeam.location !== '' ? userTeam.location : null}</h3>
+                <div>
+                    <ul>
+                        {userTeam.team.length !== 0 ? userTeam.team.map((player, index) => (
+                            <li key={index}>{player.name}</li>
+                        )) : <CreateTeam createUserTeam={createUserTeam}/>}
+                    </ul>
+                </div>
+                </div>
             </div>
         )
     }
