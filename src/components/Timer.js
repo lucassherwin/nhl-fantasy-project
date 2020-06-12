@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Draft from './Draft.js';
 
 export class Timer extends Component {
     constructor() {
@@ -17,18 +18,31 @@ export class Timer extends Component {
         if (this.timer === 0 && this.state.seconds > 0) {
             this.timer = setInterval(this.countDown, 1000);
         }
+
+        // if(this.state.seconds === 0)
+        // {
+        //     this.setState({seconds: 5})
+        //     // this.startTimer()
+        // }
     }
-    
+
     countDown() {
         // Remove one second, set state so a re-render happens.
         let seconds = this.state.seconds - 1;
         this.setState({
             seconds: seconds
         });
+
+        if(seconds === 2)
+        {
+            this.props.draftPlayers()
+            console.log('2')
+        }
         
         // Check if we're at zero.
         if (seconds === 0) { 
             clearInterval(this.timer);
+            console.log('done')
         }
     }
     
