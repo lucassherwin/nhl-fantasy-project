@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Draft from './Draft.js';
 
 export class Timer extends Component {
     constructor() {
@@ -19,11 +18,17 @@ export class Timer extends Component {
             this.timer = setInterval(this.countDown, 1000);
         }
 
-        // if(this.state.seconds === 0)
-        // {
-        //     this.setState({seconds: 5})
-        //     // this.startTimer()
-        // }
+        if(this.state.seconds === 0)
+        {
+            this.resetTimer()
+            // this.startTimer()
+        }
+    }
+
+    resetTimer() {
+        console.log('reset')
+        this.setState({seconds: 5})
+        this.timer = 0
     }
 
     countDown() {
@@ -35,7 +40,7 @@ export class Timer extends Component {
 
         if(seconds === 2)
         {
-            this.props.draftPlayers()
+            this.props.draftPlayers(this.props.availablePlayers)
             console.log('2')
         }
         

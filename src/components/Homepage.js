@@ -1,21 +1,49 @@
 import React, { Component } from 'react';
 import PlayerTeam from './PlayerTeam.js';
 import CreateTeam from './CreateTeam.js';
-import Timer from './Timer.js';
+// import Timer from './Timer.js';
 import Draft from './Draft.js';
+// import { NavLink } from 'react-router-dom'
+
 
 export class Homepage extends Component {
     state = {
         team: null, //team obj from backend
         showTimer: false, //when true, show the timer and start the draft
         draftedPlayers: [],
-        availablePlayers: null
+        availablePlayers: null //players in PlayerTeam
+        // npcTeam1: [],
+        // npcTeam2: []
     }  
 
     componentDidMount(){
         fetch('http://localhost:3001/teams')
         .then(resp => resp.json())
         .then(data => this.setState({team: data.filter(team => team.user_id === this.props.currentUser.id)}))
+    }
+
+    draftPlayers = () => {
+        // //when called choose 2 random players from this.state.players and add them to the npcTeams
+        const randomPlayer1 = this.state.availablePlayers[Math.floor(Math.random() * this.state.availablePlayers.length)];
+        const randomPlayer2 = this.state.availablePlayers[Math.floor(Math.random() * this.state.availablePlayers.length)];
+        console.log('random player 1:', randomPlayer1)
+        console.log('random player 2:', randomPlayer2)
+        
+        this.props.setNPCTeams(randomPlayer1, randomPlayer2)
+    }
+
+    startTimer = () => {
+        console.log('start timer');
+        this.setState({showTimer: !this.state.showTimer})
+    }
+
+    getPlayers = () => {
+            //gets all the available players from backend
+            let teamID = this.state.team[0].id
+            // let teamID = 3
+            fetch('http://localhost:3001/players')
+            .then(resp => resp.json())
+            .then(data => this.setState({availablePlayers: data.filter(player => player.team_id === teamID)}))
     }
 
     render() {
@@ -31,29 +59,21 @@ export class Homepage extends Component {
                     <div className='teamStats'>
                         <p>Team stats here</p>
                     </div>
-                {this.state.team !== null ? <PlayerTeam setAvailablePlayers={this.setAvailablePlayers} team={this.state.team} setCurrentPlayer={this.props.setCurrentPlayer} userTeam={userTeam}
-                npcTeam1={this.state.npcTeam2} npcTeam2={this.state.npcTeam2}/> : null }
+                {this.state.team !== null ? <PlayerTeam draftPlayers={this.draftPlayers} players={this.state.availablePlayers} getPlayers={this.getPlayers}
+                setAvailablePlayers={this.setAvailablePlayers} team={this.state.team}
+                setCurrentPlayer={this.props.setCurrentPlayer} userTeam={userTeam}
+                npcTeam1={this.props.npcTeam1} npcTeam2={this.props.npcTeam2}/> : null }
                 <div>
-                <h1>User Team</h1>
-                <h2>{userTeam.name !== '' ? userTeam.name : null}</h2>
-                <h3>{userTeam.location !== '' ? userTeam.location : null}</h3>
-                <div>
-                    <ul>
-                        {userTeam.team.length !== 0 ? userTeam.team.map((player, index) => (
-                            <li key={index}>{player.name}</li>
-                        )) : <CreateTeam createUserTeam={createUserTeam}/>}
-                    </ul>
-                </div>
-                </div>
-                <div>
-                    {/* <h1>NPC Team1</h1>
+                    <h1>User Team</h1>
+                    <h2>{userTeam.name !== '' ? userTeam.name : null}</h2>
+                    <h3>{userTeam.location !== '' ? userTeam.location : null}</h3>
                     <div>
                         <ul>
-                            {this.state.npcTeam1.length !== 0 ? this.state.npcTeam1.map((player, index) => (
+                            {userTeam.team.length !== 0 ? userTeam.team.map((player, index) => (
                                 <li key={index}>{player.name}</li>
-                            )) : null}
+                            )) : <CreateTeam createUserTeam={createUserTeam}/>}
                         </ul>
-                    </div> */}
+                    </div>
                 </div>
             </div>
         )

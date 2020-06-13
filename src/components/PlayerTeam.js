@@ -5,19 +5,35 @@ import Timer from './Timer.js';
 
 export class PlayerTeam extends Component {
     state = {
-        players: null, //all of the available players
-        npcTeam1: [],
-        npcTeam2: [],
+        // players: null, //all of the available players
+        // npcTeam1: [],
+        // npcTeam2: [],
         showTimer: false
     }
 
-    draftPlayers = () => {
-        // //when called choose 2 random players from this.state.players and add them to the npcTeams
-        const randomPlayer1 = this.state.players[Math.floor(Math.random() * this.state.players.length)];
-        const randomPlayer2 = this.state.players[Math.floor(Math.random() * this.state.players.length)];
-        console.log('random player 1:', randomPlayer1)
-        console.log('random player 2:', randomPlayer2)
+    componentDidMount(){
+        this.props.getPlayers();
     }
+
+    // draftPlayers = () => {
+    //     // //when called choose 2 random players from this.state.players and add them to the npcTeams
+    //     const randomPlayer1 = this.state.players[Math.floor(Math.random() * this.state.players.length)];
+    //     const randomPlayer2 = this.state.players[Math.floor(Math.random() * this.state.players.length)];
+    //     console.log('random player 1:', randomPlayer1)
+    //     console.log('random player 2:', randomPlayer2)
+        
+    //     //npcTeam1
+    //     let npc1 = this.state.npcTeam1;
+    //     npc1.push(randomPlayer1)
+    //     this.setState({npcTeam1: npc1})
+    //     console.log('npcTeam1: ', this.state.npcTeam1)
+
+    //     //npcTeam2
+    //     let npc2 = this.state.npcTeam2;
+    //     npc2.push(randomPlayer2)
+    //     this.setState({npcTeam2: npc2})
+    //     console.log('npcTeam2: ', this.state.npcTeam2)
+    // }
 
     //starts the timer
     startTimer = () => {
@@ -25,13 +41,14 @@ export class PlayerTeam extends Component {
         this.setState({showTimer: !this.state.showTimer})
     }
 
-    componentDidMount() {
-        let teamID = this.props.team[0].id
-        // let teamID = 3
-        fetch('http://localhost:3001/players')
-        .then(resp => resp.json())
-        .then(data => this.setState({players: data.filter(player => player.team_id === teamID)}))
-    }
+    // componentDidMount() {
+    //     let teamID = this.props.team[0].id
+    //     // let teamID = 3
+    //     fetch('http://localhost:3001/players')
+    //     .then(resp => resp.json())
+    //     .then(data => this.setState({players: data.filter(player => player.team_id === teamID)}))
+    //     // this.props.getPlayers()
+    // }
 
     render() {
         let {setCurrentPlayer, userTeam} = this.props
@@ -39,16 +56,22 @@ export class PlayerTeam extends Component {
             <div>
                 <h1>Available Players</h1>
                 <button onClick={this.startTimer}>Start Timer</button>
-                {this.state.showTimer ? <Timer availablePlayers={this.state.players} draftPlayers={this.draftPlayers}/> : null}
+                {this.state.showTimer ? <Timer availablePlayers={this.state.availablePlayers} draftPlayers={this.props.draftPlayers}/> : null}
                 <div>
                     <ul>
-                        {this.state.players !== null ? this.state.players.map((player, index) => (
+                        {this.props.players !== null ? this.props.players.map((player, index) => (
                             userTeam.team.some(p => p.name === player.name) ? null :
                             <li key={index} onClick={() => setCurrentPlayer(player)}>
                             <NavLink to={`playerPage/${player.id}` }>{player.name}</NavLink></li>))
                             : null}
                     </ul>
                 </div>
+                <h2>NPC Team 1:</h2>
+                <ul>
+                {this.props.npcTeam1.length !== 0 ? this.props.npcTeam1.map((player, index) => (
+                    <li key={index}>{player.name}</li>
+                )) : null}
+                </ul>
             </div>
         )
     }
