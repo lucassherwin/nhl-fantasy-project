@@ -10,7 +10,7 @@ export class Homepage extends Component {
     state = {
         team: null, //team obj from backend
         showTimer: false, //when true, show the timer and start the draft
-        draftedPlayers: [],
+        // draftedPlayers: [],
         availablePlayers: null //players in PlayerTeam
         // npcTeam1: [],
         // npcTeam2: []
@@ -38,16 +38,16 @@ export class Homepage extends Component {
     }
 
     getPlayers = () => {
-            //gets all the available players from backend
-            let teamID = this.state.team[0].id
-            // let teamID = 3
-            fetch('http://localhost:3001/players')
-            .then(resp => resp.json())
-            .then(data => this.setState({availablePlayers: data.filter(player => player.team_id === teamID)}))
+        //gets all the available players from backend
+        let teamID = this.state.team[0].id
+        fetch('http://localhost:3001/players')
+        .then(resp => resp.json())
+        .then(data => this.setState({availablePlayers: data.filter(player => player.team_id === teamID)}))
     }
 
     render() {
         let { userTeam, createUserTeam } = this.props
+
         return (
             <div>
                 {/* <button onClick={this.startTimer}>Start Timer</button>
