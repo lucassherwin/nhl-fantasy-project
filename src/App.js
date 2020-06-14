@@ -17,7 +17,9 @@ class App extends Component {
       team: [],
       name: '',
       location: ''
-    }
+    },
+    npcTeam1: [],
+    npcTeam2: []
   }
 
   logIn = (userObj) => {
@@ -46,6 +48,23 @@ class App extends Component {
     this.setState({userTeam: {...this.state.userTeam, name: name, location: location}})
   }
 
+  setNPCTeams = (player1, player2) => {
+    console.log('npc player 1: ', player1)
+    console.log('npc player 2:', player2)
+    
+    //npcTeam1
+    let npc1 = this.state.npcTeam1;
+    npc1.push(player1)
+    this.setState({npcTeam1: npc1})
+    console.log('npcTeam1: ', this.state.npcTeam1)
+
+    //npcTeam2
+    let npc2 = this.state.npcTeam2;
+    npc2.push(player2)
+    this.setState({npcTeam2: npc2})
+    console.log('npcTeam2: ', this.state.npcTeam2)
+  }
+
   componentDidMount() {
     //store all current users from db in state
     fetch('http://localhost:3001/users')
@@ -69,7 +88,7 @@ class App extends Component {
           {/* <Route exact path='/homepage' >
             <Homepage currentUser={this.state.currentUser} getUserTeam={this.getUserTeam} setPlayerObj={this.setPlayerObj} />
           </Route> */}
-          <Route exact path='/homepage' render={(props) => <Homepage {...props} currentUser={this.state.currentUser}
+          <Route exact path='/homepage' render={(props) => <Homepage {...props} setNPCTeams={this.setNPCTeams} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser}
           setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} userTeam={this.state.userTeam} createUserTeam={this.createUserTeam}/>}
           />
           {/* <Route exact path='/signup'>
