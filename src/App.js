@@ -47,7 +47,6 @@ class App extends Component {
   }
 
   createUserTeam = (event, name, location) => {
-    // event.preventDefault();
     this.setState({userTeam: {...this.state.userTeam, name: name, location: location}})
   }
 
@@ -79,38 +78,25 @@ class App extends Component {
   {
     return (
       <div>
-        {/* <Router> */}
         <Navbar />
         <div>
         <Switch>
-        {/* <Route exact path='playerPage/:id' component={PlayerPage} />          */}
             <Route exact path='/playerPage/:id' >
-              {/* {this.state.playerObj !== null ? <PlayerPage /> : null} */}
               <PlayerPage setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} addPlayerToUserTeam={this.addPlayerToUserTeam}/>
           </Route>
-          {/* <Route exact path='/homepage' >
-            <Homepage currentUser={this.state.currentUser} getUserTeam={this.getUserTeam} setPlayerObj={this.setPlayerObj} />
-          </Route> */}
           <Route exact path='/homepage' render={(props) => <Homepage {...props} setNPCTeams={this.setNPCTeams} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser}
           setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} userTeam={this.state.userTeam} createUserTeam={this.createUserTeam}/>}
           />
-          {/* <Route exact path='/signup'>
-            <Signup />
-          </Route> */}
           <Route exact path='/signup' component={Signup} />
           <Route exact path='/'>
             {this.state.loggedIn ? <Redirect to={{
               pathname:'/homepage'
               }} /> : <Login logIn={this.logIn} />}
           </Route>
-          {/* {this.state.loggedIn ? <Redirect to={{
-              pathname:'/homepage'
-              }} /> : <Login logIn={this.logIn} />} */}
           <Route exact path='/matchup' render={(props) => <Matchup {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} />} />
           <Route exact path='/myteam' render={(props) => <MyTeam {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} />} />
           </Switch>
         </div>
-        {/* </Router> */}
       </div>
     );
   }

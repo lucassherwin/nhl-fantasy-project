@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
 import PlayerTeam from './PlayerTeam.js';
 import CreateTeam from './CreateTeam.js';
-// import Timer from './Timer.js';
 import Draft from './Draft.js';
-// import { NavLink } from 'react-router-dom'
-
 
 export class Homepage extends Component {
     state = {
         team: null, //team obj from backend
         showTimer: false, //when true, show the timer and start the draft
-        // draftedPlayers: [],
         availablePlayers: null //players in PlayerTeam
-        // npcTeam1: [],
-        // npcTeam2: []
     }  
 
     componentDidMount(){

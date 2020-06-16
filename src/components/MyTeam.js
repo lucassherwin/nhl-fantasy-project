@@ -60,6 +60,7 @@ export class MyTeam extends Component {
                                 <li>Power Play Goals: {this.state.ppg}</li>
                                 <li>Game Winning Goals: {this.state.gwg}</li>
                                 <li>Penalty Minutes: {this.state.pim}</li>
+                                <li>Time On Ice: {this.state.toi}</li>
                                 <li>Hits: {this.state.hits}</li>
                             </ul>
                 </div>
