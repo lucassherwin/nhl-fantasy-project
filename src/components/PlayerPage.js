@@ -9,7 +9,7 @@ export class PlayerPage extends Component {
         let {currentPlayer, addPlayerToUserTeam} = this.props
         const options = {
             title: {
-                text: "Basic Column Chart in React"
+                text: "Player Data Chart"
             },
             data: [{				
                     type: "column",

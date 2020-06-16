@@ -14,6 +14,8 @@ export class Navbar extends Component {
         return (
             <div>
                     <NavLink to="/homepage" exact style={link} activeStyle={{background: 'darkblue'}}>HomePage</NavLink>
+                    <NavLink to='/matchup' exact style={link} activeStyle={{background: 'darkblue'}}>Matchup</NavLink>
+                    <NavLink to='/myteam' exact style={link} activeStyle={{background: 'darkblue'}}>My Team</NavLink>
                     <NavLink to="/login" exact style={link} activeStyle={{background: 'darkblue'}}>Log Out</NavLink>
             </div>
         )
