@@ -59,6 +59,10 @@ export class Homepage extends Component {
                     <div className='teamStats'>
                         <p>Team stats here</p>
                     </div>
+
+                <label htmlFor='search'>Search By Player Name</label>
+                <input type='text' />
+                
                 {this.state.team !== null ? <PlayerTeam draftPlayers={this.draftPlayers} players={this.state.availablePlayers} getPlayers={this.getPlayers}
                 setAvailablePlayers={this.setAvailablePlayers} team={this.state.team}
                 setCurrentPlayer={this.props.setCurrentPlayer} userTeam={userTeam}

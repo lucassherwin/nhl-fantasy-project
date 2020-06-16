@@ -6,6 +6,9 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import Signup from './components/Signup.js';
 import PlayerPage from './components/PlayerPage.js'
 import Navbar from './components/Navbar.js';
+import Matchup from './components/Matchup.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import MyTeam from './components/MyTeam.js';
 
 class App extends Component {
   state = {
@@ -103,6 +106,8 @@ class App extends Component {
           {/* {this.state.loggedIn ? <Redirect to={{
               pathname:'/homepage'
               }} /> : <Login logIn={this.logIn} />} */}
+          <Route exact path='/matchup' render={(props) => <Matchup {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} />} />
+          <Route exact path='/myteam' render={(props) => <MyTeam {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} />} />
           </Switch>
         </div>
         {/* </Router> */}

@@ -72,6 +72,13 @@ export class PlayerTeam extends Component {
                     <li key={index}>{player.name}</li>
                 )) : null}
                 </ul>
+
+                <h2>NPC Team 2:</h2>
+                <ul>
+                {this.props.npcTeam2.length !== 0 ? this.props.npcTeam2.map((player, index) => (
+                    <li key={index}>{player.name}</li>
+                )) : null}
+                </ul>
             </div>
         )
     }
