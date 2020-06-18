@@ -22,17 +22,25 @@ export class CreateTeam extends Component {
     }
 
     render() {
+        let rightAlign = {
+            position: 'absolute',
+            right: '0px',
+            width: '300px',
+            padding: '10px'
+        }
         return (
             <div>
                 <form>
                     <label>
-                        Team Name:
-                        <input type='text' name='teamname' placeholder='Enter a name for your team' onChange={(event) => this.handleName(event)}></input>
+                        Enter a team name: <br />
+                        <input type='text' name='teamname' placeholder='Team Name' onChange={(event) => this.handleName(event)}></input> <br />
                     </label>
+                    <br />
                     <label>
-                        Location:
-                        <input type='text' name='teamname' placeholder='Enter the location of your team' onChange={(event) => this.handleLocation(event)}></input>
+                        Enter a team location: <br />
+                        <input type='text' name='teamname' placeholder='Team Location' onChange={(event) => this.handleLocation(event)}></input>
                     </label>
+                    <br />
                     <input type='submit' name='createTeam' placeholder='Create Team' onClick={(event) => this.handleSubmit(event)}></input>
                 </form>
             </div>

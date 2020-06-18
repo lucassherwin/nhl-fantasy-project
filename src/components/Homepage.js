@@ -42,34 +42,37 @@ export class Homepage extends Component {
     render() {
         let { userTeam, createUserTeam } = this.props
 
+        let teamFormStyle = { textAlign: 'right' }
+
         return (
             <div>
                 {/* <button onClick={this.startTimer}>Start Timer</button>
                 {this.state.showTimer ? <Timer /> : null} */}
                 <h1>Homepage</h1>
                 {this.state.showTimer ? <Draft /> : null}
-                <h2>User Team Name</h2>
+                <h2>Username:</h2>
                 <h3>{this.props.currentUser.name}</h3>
-                    <div className='teamStats'>
-                        <p>Team stats here</p>
-                    </div>
-
+                <h2>Team Name: {this.props.userTeam.isCreated ? this.props.userTeam.name : null}</h2>
+                    {/* <div> */}
+                    {/* <h1 style={teamFormStyle}>User Team</h1>
+                    <h2 style={teamFormStyle}>Name: {userTeam.name !== '' ? userTeam.name : null}</h2>
+                    <h3 style={teamFormStyle}>Location: {userTeam.location !== '' ? userTeam.location : null}</h3> */}
+                    {/* <div> */}
+                        {/* <ul>
+                            {userTeam.team.length !== 0 ? userTeam.team.map((player, index) => (
+                                <li key={index}>{player.name}</li>
+                            )) : <CreateTeam createUserTeam={createUserTeam}/>}
+                        </ul> */}
+                    {/* </div> */}
+                {/* // </div> */}
+            <div>
                 {this.state.team !== null ? <PlayerTeam draftPlayers={this.draftPlayers} players={this.state.availablePlayers} getPlayers={this.getPlayers}
                 setAvailablePlayers={this.setAvailablePlayers} team={this.state.team}
                 setCurrentPlayer={this.props.setCurrentPlayer} userTeam={userTeam}
                 npcTeam1={this.props.npcTeam1} npcTeam2={this.props.npcTeam2}/> : null }
-                <div>
-                    <h1>User Team</h1>
-                    <h2>{userTeam.name !== '' ? userTeam.name : null}</h2>
-                    <h3>{userTeam.location !== '' ? userTeam.location : null}</h3>
-                    <div>
-                        <ul>
-                            {userTeam.team.length !== 0 ? userTeam.team.map((player, index) => (
-                                <li key={index}>{player.name}</li>
-                            )) : <CreateTeam createUserTeam={createUserTeam}/>}
-                        </ul>
-                    </div>
-                </div>
+            </div>
+                
+                
             </div>
         )
     }

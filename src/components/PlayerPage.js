@@ -33,14 +33,26 @@ export class PlayerPage extends Component {
                 <h1>Player Page</h1>
                     <div>
                         <h2>
-                            Goals: {currentPlayer.goals}
+                            {currentPlayer.name} Stats
                         </h2>
+                        <div>
+                            <ul>
+                                <li>Goals: {currentPlayer.goals}</li>
+                                <li>Assists: {currentPlayer.assists}</li>
+                                <li>Points: {currentPlayer.points}</li>
+                                <li>Power Play Goals: {currentPlayer.ppg}</li>
+                                <li>Game Winning Goals: {currentPlayer.gwg}</li>
+                                <li>Penalty Minutes: {currentPlayer.pim}</li>
+                                {/* <li>Time On Ice: {currentPlayer.toi}</li> */}
+                                <li>Hits: {currentPlayer.hits}</li>
+                            </ul>
+                        </div>
                     </div>
                 <h2>{currentPlayer.name}</h2>
                 <button type='submit' onClick={() => addPlayerToUserTeam(currentPlayer)}>Add Player To Team</button>
 
                 <div>
-                    <CanvasJSChart options = {options} /* onRef = {ref => this.chart = ref} *//>
+                    <CanvasJSChart options = {options} />
                 </div>
             </div>
         )

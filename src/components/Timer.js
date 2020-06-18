@@ -54,7 +54,7 @@ export class Timer extends Component {
     render() {
         return(
             <div>
-                <button onClick={this.startTimer}>Start</button>
+                <button onClick={this.startTimer}>Start Draft</button>
                 s: {this.state.seconds}
             </div>
         );

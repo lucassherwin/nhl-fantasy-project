@@ -9,6 +9,7 @@ import Navbar from './components/Navbar.js';
 import Matchup from './components/Matchup.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MyTeam from './components/MyTeam.js';
+import CreateTeam from './components/CreateTeam.js';
 
 class App extends Component {
   state = {
@@ -19,7 +20,8 @@ class App extends Component {
     userTeam: {
       team: [],
       name: '',
-      location: ''
+      location: '',
+      isCreated: false
     },
     npcTeam1: [],
     npcTeam2: []
@@ -47,7 +49,7 @@ class App extends Component {
   }
 
   createUserTeam = (event, name, location) => {
-    this.setState({userTeam: {...this.state.userTeam, name: name, location: location}})
+    this.setState({userTeam: {...this.state.userTeam, name: name, location: location, isCreated: !this.state.userTeam.isCreated}})
   }
 
   setNPCTeams = (player1, player2) => {
@@ -95,6 +97,7 @@ class App extends Component {
           </Route>
           <Route exact path='/matchup' render={(props) => <Matchup {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} />} />
           <Route exact path='/myteam' render={(props) => <MyTeam {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} />} />
+          <Route exact paht='/create' render={(props) => <CreateTeam {...props} createUserTeam={this.createUserTeam} userTeam={this.state.userTeam} /> } />
           </Switch>
         </div>
       </div>
