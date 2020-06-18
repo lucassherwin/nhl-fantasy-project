@@ -145,7 +145,7 @@ export class Matchup extends Component {
         this.getNPCTeam1Totals();
         this.getNPCTeam2Totals();
 
-        // this.determineWinner();
+        this.determineWinner();
 
         console.log(this.state);
     }

@@ -1,4 +1,8 @@
 import React, { Component } from 'react'
+import CanvasJSReact from '../canvasjs.react';
+
+var CanvasJS = CanvasJSReact.CanvasJS;
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export class MyTeam extends Component {
     state = {
@@ -33,6 +37,14 @@ export class MyTeam extends Component {
         this.setState({goals: goals, assists: assists, ppg: ppg, gwg: gwg, pim: pim, points: points, hits: hits})
     }
 
+    // componentDidUpdate(prevProps, prevState)
+    // {
+    //     if(prevState.goals !== this.state.goals)
+    //     {
+    //         this.getTeamTotals();
+    //     }
+    // }
+
     componentDidMount() {
         this.getTeamTotals()
         console.log(this.state)
@@ -40,6 +52,24 @@ export class MyTeam extends Component {
 
 
     render() {
+        const options = {
+            title: {
+                text: "Player Data Chart"
+            },
+            data: [{				
+                    type: "column",
+                    dataPoints: [
+                        { label: "Goals",  y: this.state.goals  },
+                        { label: "Assists", y: this.state.assists  },
+                        { label: "Power Player Goals", y: this.state.ppg  },
+                        // { label: "Time On Ice",  y: this.state.toi  }, this is a string in the backend
+                        { label: "Game Winning Goals",  y: this.state.gwg  },
+                        { label: "Penalty Minutes",  y: this.state.pim  },
+                        { label: "Points",  y: this.state.points  },
+                        { label: "Hits",  y: this.state.hits  }
+                    ]
+            }]
+        }
         return (
             <div>
                 <h1>{this.props.currentUser.name}'s Team</h1>
@@ -60,9 +90,12 @@ export class MyTeam extends Component {
                                 <li>Power Play Goals: {this.state.ppg}</li>
                                 <li>Game Winning Goals: {this.state.gwg}</li>
                                 <li>Penalty Minutes: {this.state.pim}</li>
-                                <li>Time On Ice: {this.state.toi}</li>
+                                {/* <li>Time On Ice: {this.state.toi}</li> */}
                                 <li>Hits: {this.state.hits}</li>
                             </ul>
+                </div>
+                <div>
+                    <CanvasJSChart options = {options} />
                 </div>
             </div>
         )

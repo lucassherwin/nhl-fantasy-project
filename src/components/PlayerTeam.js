@@ -35,11 +35,12 @@ export class PlayerTeam extends Component {
         return (
             <div>
                 <h1>Available Players</h1>
-                <button onClick={this.startTimer}>Start Draft</button>
+                {/* <button onClick={this.startTimer}>Start Draft</button> */}
 
                 <Search search={this.state.search} handleSearch={this.handleSearch} />
                 
-                {this.state.showTimer ? <Timer availablePlayers={this.state.availablePlayers} draftPlayers={this.props.draftPlayers}/> : null}
+                {/* {this.state.showTimer ? <Timer availablePlayers={this.state.availablePlayers} draftPlayers={this.props.draftPlayers}/> : null} */}
+                <Timer availablePlayers={this.state.availablePlayers} draftPlayers={this.props.draftPlayers}/>
                 <div>
                     <ul>
                         {this.props.players !== null ? filterPlayers.map((player, index) => (
@@ -49,7 +50,7 @@ export class PlayerTeam extends Component {
                             : null}
                     </ul>
                 </div>
-                <h2>NPC Team 1:</h2>
+                {/* <h2>NPC Team 1:</h2>
                 <ul>
                 {this.props.npcTeam1.length !== 0 ? this.props.npcTeam1.map((player, index) => (
                     <li key={index}>{player.name}</li>
@@ -61,7 +62,7 @@ export class PlayerTeam extends Component {
                 {this.props.npcTeam2.length !== 0 ? this.props.npcTeam2.map((player, index) => (
                     <li key={index}>{player.name}</li>
                 )) : null}
-                </ul>
+                </ul> */}
             </div>
         )
     }

@@ -32,6 +32,9 @@ export class Navbar extends Component {
                     <Nav.Link as={NavLink} to="/myteam" exact>My Team</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
+                    <Nav.Link as={NavLink} to="/createteam" exact>Create Team</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
                     <Nav.Link as={NavLink} to="/login" exact>Log Out</Nav.Link>
                 </Nav.Item>
             </Nav>
