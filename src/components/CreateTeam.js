@@ -6,14 +6,8 @@ export class CreateTeam extends Component {
         location: ''
     }
 
-    handleName = (event) => {
-        this.setState({name: event.target.value})
-        console.log(event.target.value)
-    }
-
-    handleLocation = (event) => {
-        this.setState({location: event.target.value})
-        console.log(event.target.value)
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value});
     }
 
     handleSubmit = (event) => {
@@ -24,18 +18,18 @@ export class CreateTeam extends Component {
     render() {
         return (
             <div>
-                <form>
+                <form onSubmit={this.handleSubmit}>
                     <label>
                         Enter a team name: <br />
-                        <input type='text' name='teamname' placeholder='Team Name' onChange={(event) => this.handleName(event)}></input> <br />
+                        <input type='text' name='teamname' placeholder='Team Name' onChange={this.handleChange}></input> <br />
                     </label>
                     <br />
                     <label>
                         Enter a team location: <br />
-                        <input type='text' name='teamname' placeholder='Team Location' onChange={(event) => this.handleLocation(event)}></input>
+                        <input type='text' name='teamname' placeholder='Team Location' onChange={this.handleChange}></input>
                     </label>
                     <br />
-                    <input type='submit' name='createTeam' placeholder='Create Team' onClick={(event) => this.handleSubmit(event)}></input>
+                    <input type='submit' name='createTeam' value='Create Team' />
                 </form>
             </div>
         )
