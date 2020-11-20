@@ -16,7 +16,6 @@ class App extends Component {
   state = {
     loggedIn: false,
     currentUser: {},
-    // allUsers: [],
     currentPlayer: null,
     userTeam: {
       team: [],
@@ -25,23 +24,17 @@ class App extends Component {
       isCreated: false
     },
     npcTeam1: [],
-    npcTeam2: []
+    npcTeam2: [],
+    // allPlayers: null
   }
 
-  // componentDidMount() {
-  //   // get current user
-  //   axios.get('http://localhost:3001/users')
-  //   // .then(data => this.setState({currentUser: data['data'][0]}))
-  //   .then(resp => console.log('resp', resp))
-    
-  // }
+//   componentDidMount() {
+//     axios.get('http://localhost:3001/players')
+//     .then(resp => this.setState({allPlayers: resp.data}))
+// }
 
   logIn = (userObj) => {
-    // let currentUserObj = this.state.allUsers.find(user => userObj.username ===  user.name)
-  
-    // this.setState({currentUser: currentUserObj})
     console.log('in logIn userObj', userObj);
-    
     this.setState({loggedIn: true})
   }
 
@@ -89,8 +82,10 @@ class App extends Component {
             <Route exact path='/playerPage/:id' >
               <PlayerPage setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} addPlayerToUserTeam={this.addPlayerToUserTeam}/>
           </Route>
-          <Route exact path='/homepage' render={(props) => <Homepage {...props} setNPCTeams={this.setNPCTeams} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser}
-          setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} userTeam={this.state.userTeam} createUserTeam={this.createUserTeam}/>}
+          <Route exact path='/homepage' render={(props) => <Homepage {...props} setNPCTeams={this.setNPCTeams} npcTeam1={this.state.npcTeam1} 
+          npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser}
+          setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} userTeam={this.state.userTeam} 
+          createUserTeam={this.createUserTeam} />}
           />
           <Route exact path='/signup' component={Signup} />
           <Route exact path='/'>

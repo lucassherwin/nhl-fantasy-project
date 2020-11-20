@@ -32,7 +32,7 @@ export class Login extends Component {
                 <Form>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" placeholder="Enter username" onChange={this.handleChange} style={inputWidth}/>
+                        <Form.Control type="text" placeholder="Enter username" name='username' onChange={this.handleChange} style={inputWidth}/>
                         <Form.Text className="text-muted">
                         Enter your username
                         </Form.Text>

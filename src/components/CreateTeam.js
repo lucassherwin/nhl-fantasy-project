@@ -22,12 +22,6 @@ export class CreateTeam extends Component {
     }
 
     render() {
-        let rightAlign = {
-            position: 'absolute',
-            right: '0px',
-            width: '300px',
-            padding: '10px'
-        }
         return (
             <div>
                 <form>
