@@ -10,12 +10,13 @@ import Matchup from './components/Matchup.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MyTeam from './components/MyTeam.js';
 import CreateTeam from './components/CreateTeam.js';
+import axios from 'axios';
 
 class App extends Component {
   state = {
     loggedIn: false,
     currentUser: {},
-    allUsers: [],
+    // allUsers: [],
     currentPlayer: null,
     userTeam: {
       team: [],
@@ -27,10 +28,19 @@ class App extends Component {
     npcTeam2: []
   }
 
+  // componentDidMount() {
+  //   // get current user
+  //   axios.get('http://localhost:3001/users')
+  //   // .then(data => this.setState({currentUser: data['data'][0]}))
+  //   .then(resp => console.log('resp', resp))
+    
+  // }
+
   logIn = (userObj) => {
-    let currentUserObj = this.state.allUsers.find(user => userObj.username ===  user.name)
+    // let currentUserObj = this.state.allUsers.find(user => userObj.username ===  user.name)
   
-    this.setState({currentUser: currentUserObj})
+    // this.setState({currentUser: currentUserObj})
+    console.log('in logIn userObj', userObj);
     
     this.setState({loggedIn: true})
   }
@@ -67,13 +77,6 @@ class App extends Component {
     npc2.push(player2)
     this.setState({npcTeam2: npc2})
     console.log('npcTeam2: ', this.state.npcTeam2)
-  }
-
-  componentDidMount() {
-    //store all current users from db in state
-    fetch('http://localhost:3001/users')
-    .then(resp => resp.json())
-    .then(data => this.setState({allUsers: data}))
   }
   
   render()
