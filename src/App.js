@@ -39,6 +39,7 @@ class App extends Component {
   }
 
   setCurrentPlayer = (player) => {
+    console.log(player)
     this.setState({currentPlayer: player})
   }
 
@@ -83,8 +84,7 @@ class App extends Component {
               <PlayerPage setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} addPlayerToUserTeam={this.addPlayerToUserTeam}/>
           </Route>
           <Route exact path='/homepage' render={(props) => <Homepage {...props} setNPCTeams={this.setNPCTeams} npcTeam1={this.state.npcTeam1} 
-          npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser}
-          setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} userTeam={this.state.userTeam} 
+          npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser} setCurrentPlayer={this.setCurrentPlayer} userTeam={this.state.userTeam} 
           createUserTeam={this.createUserTeam} />}
           />
           <Route exact path='/signup' component={Signup} />

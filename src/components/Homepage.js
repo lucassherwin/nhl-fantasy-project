@@ -58,7 +58,7 @@ export class Homepage extends Component {
                     <input type='text' placeholder='Search All Players' name='search' value={this.search} onChange={this.handleSearch} />
                     <ul>
                         {this.state.allPlayers !== null ? filterPlayers.map((player) => (
-                            <li key={player.id}><NavLink to={`playerPage/${player.id}` }>{player.name}</NavLink></li>
+                            <li key={player.id}><NavLink to={`playerPage/${player.id}`} onClick={() => this.props.setCurrentPlayer(player)}>{player.name}</NavLink></li>
                         )) : null}
                     </ul>
                 </div>
