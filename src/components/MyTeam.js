@@ -37,14 +37,6 @@ export class MyTeam extends Component {
         this.setState({goals: goals, assists: assists, ppg: ppg, gwg: gwg, pim: pim, points: points, hits: hits})
     }
 
-    // componentDidUpdate(prevProps, prevState)
-    // {
-    //     if(prevState.goals !== this.state.goals)
-    //     {
-    //         this.getTeamTotals();
-    //     }
-    // }
-
     componentDidMount() {
         this.getTeamTotals()
         console.log(this.state)
@@ -72,7 +64,7 @@ export class MyTeam extends Component {
         }
         return (
             <div>
-                <h1>{this.props.currentUser.name}'s Team</h1>
+                <h1>{this.props.userTeam.name}</h1>
                 <div>
                 <h2>Players:</h2>
                     <ul>

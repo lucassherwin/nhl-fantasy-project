@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 
 export class CreateTeam extends Component {
     state = {
-        name: '',
-        location: ''
+        name: null,
+        location: null
     }
 
     handleChange = (event) => {
@@ -21,12 +21,12 @@ export class CreateTeam extends Component {
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Enter a team name: <br />
-                        <input type='text' name='teamname' placeholder='Team Name' onChange={this.handleChange}></input> <br />
+                        <input type='text' name='name' placeholder='Team Name' onChange={this.handleChange}></input> <br />
                     </label>
                     <br />
                     <label>
                         Enter a team location: <br />
-                        <input type='text' name='teamname' placeholder='Team Location' onChange={this.handleChange}></input>
+                        <input type='text' name='location' placeholder='Team Location' onChange={this.handleChange}></input>
                     </label>
                     <br />
                     <input type='submit' name='createTeam' value='Create Team' />

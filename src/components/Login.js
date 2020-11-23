@@ -8,25 +8,26 @@ import Card from 'react-bootstrap/Card'
 
 export class Login extends Component {
     state = {
-        user: {
-            username: null,
-            password: null
-        }
+        username: null,
+        password: null
     }
 
     handleChange = (event) => {
+        // console.log(event.target.value)
         this.setState({[event.target.name]: event.target.value});
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.logIn(this.state.user)
+        // console.log('username', this.state.username);
+        // console.log('password', this.state.password);
+        this.props.logIn(this.state.username)
 
         console.log('log in')
     }
 
     render() {
-        let inputWidth = { width: '50%' }
+        let inputWidth = { width: '25%' }
         return (
             <div>
                 <Form>
@@ -40,7 +41,7 @@ export class Login extends Component {
 
                 <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" onChange={this.handleChange} style={inputWidth} />
+                    <Form.Control type="password" placeholder="Password" name='password' onChange={this.handleChange} style={inputWidth} />
                 </Form.Group>
 
                 <Form.Group controlId="formBasicCheckbox">

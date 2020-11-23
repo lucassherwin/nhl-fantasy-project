@@ -10,12 +10,13 @@ import Matchup from './components/Matchup.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MyTeam from './components/MyTeam.js';
 import CreateTeam from './components/CreateTeam.js';
-import axios from 'axios';
+// import { Nav } from 'react-bootstrap';
+// import axios from 'axios';
 
 class App extends Component {
   state = {
     loggedIn: false,
-    currentUser: {},
+    currentUser: null,
     currentPlayer: null,
     userTeam: {
       team: [],
@@ -25,17 +26,12 @@ class App extends Component {
     },
     npcTeam1: [],
     npcTeam2: [],
-    // allPlayers: null
   }
-
-//   componentDidMount() {
-//     axios.get('http://localhost:3001/players')
-//     .then(resp => this.setState({allPlayers: resp.data}))
-// }
 
   logIn = (userObj) => {
     console.log('in logIn userObj', userObj);
-    this.setState({loggedIn: true})
+    // this.setState({loggedIn: true});
+    this.setState({currentUser: userObj, loggedIn: true});
   }
 
   setCurrentPlayer = (player) => {
@@ -53,6 +49,7 @@ class App extends Component {
   }
 
   createUserTeam = (event, name, location) => {
+    console.log('create team', name, location)
     this.setState({userTeam: {...this.state.userTeam, name: name, location: location, isCreated: !this.state.userTeam.isCreated}})
   }
 
@@ -77,7 +74,7 @@ class App extends Component {
   {
     return (
       <div>
-        <Navbar />
+        {this.state.loggedIn ? <Navbar /> : null}
         <div>
         <Switch>
             <Route exact path='/playerPage/:id' >

@@ -48,8 +48,7 @@ export class Homepage extends Component {
                 <div>
                     <h1>Homepage</h1>
                     {this.state.showTimer ? <Draft /> : null}
-                    <h2>Username:</h2>
-                    <h3>{this.props.currentUser.name}</h3>
+                    <h2>Username: {this.props.currentUser}</h2>
                     <h2>Team Name: {this.props.userTeam.isCreated ? this.props.userTeam.name : null}</h2>
                     <Timer />
                 </div>
