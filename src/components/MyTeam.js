@@ -66,7 +66,7 @@ export class MyTeam extends Component {
             <div>
                 <h1>{this.props.userTeam.name}</h1>
                 <div>
-                <h2>Players:</h2>
+                {this.props.userTeam.team.length !== 0 ? <h2>Players:</h2> : null}
                     <ul>
                         {this.props.userTeam.team.length !== 0 ? this.props.userTeam.team.map((player, index) => (
                             <li key={index}>{player.name}</li>

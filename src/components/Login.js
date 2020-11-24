@@ -4,12 +4,14 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
-// import axios from 'axios'
+import axios from 'axios'
 
 export class Login extends Component {
     state = {
         username: null,
-        password: null
+        password: null,
+        firstName: null,
+        lastName: null
     }
 
     handleChange = (event) => {
@@ -24,6 +26,22 @@ export class Login extends Component {
         this.props.logIn(this.state.username)
 
         console.log('log in')
+    }
+
+    handleSingup = (event) => {
+        console.log(event.target.value, event.target.name);
+        this.setState({[event.target.name]: event.target.value});
+    }
+
+    handleSignupSubmit = (event) => {
+        event.preventDefault();
+        // console.log('sign up', this.state.firstName, this.state.lastName, this.state.username)
+        axios.post('http://localhost:3001/signup', {
+            username: this.state.username,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName
+        })
+        .then(resp => console.log(resp.data));
     }
 
     render() {
@@ -66,12 +84,12 @@ export class Login extends Component {
                                 <Form>
                                     <Form.Group controlId="formBasicEmail">
                                         <Form.Label>First Name: </Form.Label>
-                                        <Form.Control type="text" placeholder="First Name" style={inputWidth}/>
+                                        <Form.Control type="text" placeholder="First Name" name='firstName' style={inputWidth} onChange={this.handleSingup} />
                                         <Form.Label>Last Name: </Form.Label>
-                                        <Form.Control type="text" placeholder="Last Name" style={inputWidth}/>
+                                        <Form.Control type="text" placeholder="Last Name" name='lastName' style={inputWidth} onChange={this.handleSingup} />
                                         
                                         <Form.Label>Create A Username:</Form.Label>
-                                        <Form.Control type="text" placeholder="Enter username" onChange={(event) => this.handleUsername(event)} style={inputWidth}/>
+                                        <Form.Control type="text" placeholder="Enter username" name='username' onChange={this.handleSingup} style={inputWidth}/>
                                         <Form.Text className="text-muted">
                                         Username
                                         </Form.Text>
@@ -79,10 +97,10 @@ export class Login extends Component {
 
                                     <Form.Group controlId="formBasicPassword">
                                         <Form.Label>Create A Password:</Form.Label>
-                                        <Form.Control type="password" placeholder="Password" onChange={(event) => this.handlePassword(event)} style={inputWidth} />
+                                        <Form.Control type="password" placeholder="Password" name='password' onChange={this.handleSignup} style={inputWidth} />
                                     </Form.Group>
 
-                                    <Button variant="primary" type="submit" >
+                                    <Button variant="primary" type="submit" onClick={this.handleSignupSubmit}>
                                     Submit
                                     </Button>
                                 </Form>
