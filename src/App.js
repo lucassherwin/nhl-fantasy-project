@@ -16,7 +16,10 @@ import axios from 'axios';
 class App extends Component {
   state = {
     loggedIn: false,
-    currentUser: null,
+    currentUser: {
+      username: null,
+      userID: null
+    },
     currentPlayer: null,
     userTeam: {
       team: [],
@@ -31,10 +34,13 @@ class App extends Component {
   logIn = (username) => {
     console.log('in logIn userObj', username);
     // this.setState({loggedIn: true});
-    this.setState({currentUser: username, loggedIn: true});
+    // this.setState({currentUser: username, loggedIn: true});
 
     axios.post(`http://localhost:3001/login`, {username})
-    .then(resp => console.log(resp.data))
+    .then(resp => {
+      this.setState({currentUser: {...this.state.currentUser, username: resp.data['username'], userID: resp.data['id']}})
+      this.setState({loggedIn: true})
+    })
   }
 
   setCurrentPlayer = (player) => {
@@ -95,7 +101,7 @@ class App extends Component {
           </Route>
           <Route exact path='/matchup' render={(props) => <Matchup {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} />} />
           <Route exact path='/myteam' render={(props) => <MyTeam {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} />} />
-          <Route exact paht='/create' render={(props) => <CreateTeam {...props} createUserTeam={this.createUserTeam} userTeam={this.state.userTeam} /> } />
+          <Route exact paht='/create' render={(props) => <CreateTeam {...props} createUserTeam={this.createUserTeam} userTeam={this.state.userTeam} currentUser={this.state.currentUser} /> } />
           </Switch>
         </div>
       </div>
