@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Redirect } from "react-router-dom";
+import axios from 'axios';
 
 export class CreateTeam extends Component {
     state = {
@@ -10,12 +12,22 @@ export class CreateTeam extends Component {
         this.setState({[event.target.name]: event.target.value});
     }
 
+    // not the most elegant solution but it works for now
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.createUserTeam(event, this.state.name, this.state.location)
+
+        axios.post(`http://localhost:3001/teams`, {
+            name: this.state.name,
+            location: this.state.location,
+            user_id: this.props.currentUser.userID
+        })
+        .then(resp => this.props.createUserTeam(event, resp.data.name, resp.data.location))
+        // this.props.createUserTeam(event, this.state.name, this.state.location)
     }
 
     render() {
+        // condition to redirect based on data returned from backend
+        // if()
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
