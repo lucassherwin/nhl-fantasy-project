@@ -5,7 +5,8 @@ import axios from 'axios';
 export class CreateTeam extends Component {
     state = {
         name: null,
-        location: null
+        location: null,
+        redirect: null
     }
 
     handleChange = (event) => {
@@ -21,13 +22,16 @@ export class CreateTeam extends Component {
             location: this.state.location,
             user_id: this.props.currentUser.userID
         })
-        .then(resp => this.props.createUserTeam(event, resp.data.name, resp.data.location))
+        .then(resp => this.props.createUserTeam(event, resp.data.name, resp.data.location), this.setState({redirect: '/myteam'}))
         // this.props.createUserTeam(event, this.state.name, this.state.location)
     }
 
     render() {
         // condition to redirect based on data returned from backend
-        // if()
+        if(this.state.redirect)
+        {
+            return <Redirect to={this.state.redirect} />
+        }
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
