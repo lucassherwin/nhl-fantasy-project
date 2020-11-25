@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MyTeam from './components/MyTeam.js';
 import CreateTeam from './components/CreateTeam.js';
 // import { Nav } from 'react-bootstrap';
-// import axios from 'axios';
+import axios from 'axios';
 
 class App extends Component {
   state = {
@@ -28,10 +28,13 @@ class App extends Component {
     npcTeam2: [],
   }
 
-  logIn = (userObj) => {
-    console.log('in logIn userObj', userObj);
+  logIn = (username) => {
+    console.log('in logIn userObj', username);
     // this.setState({loggedIn: true});
-    this.setState({currentUser: userObj, loggedIn: true});
+    this.setState({currentUser: username, loggedIn: true});
+
+    axios.post(`http://localhost:3001/login`, {username})
+    .then(resp => console.log(resp.data))
   }
 
   setCurrentPlayer = (player) => {
