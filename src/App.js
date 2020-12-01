@@ -18,7 +18,8 @@ class App extends Component {
     loggedIn: false,
     currentUser: {
       username: null,
-      userID: null
+      userID: null,
+      rememberMe: false
     },
     currentPlayer: null,
     userTeam: {
@@ -31,16 +32,27 @@ class App extends Component {
     npcTeam2: [],
   }
 
-  logIn = (username) => {
+  componentDidMount() {
+    const rememberMe = localStorage.getItem('rememberMe') === 'true';
+    const username = rememberMe ? localStorage.getItem('user') : '';
+    // const userID = rememberMe ? localStorage.getItem('userID') : '';
+    this.setState({currentUser: {...this.state.currentUser, username, rememberMe}});
+  }
+
+  logIn = (username, rememberMe) => {
     console.log('in logIn userObj', username);
     // this.setState({loggedIn: true});
     // this.setState({currentUser: username, loggedIn: true});
 
     axios.post(`http://localhost:3001/login`, {username})
     .then(resp => {
-      this.setState({currentUser: {...this.state.currentUser, username: resp.data['username'], userID: resp.data['id']}})
+      this.setState({currentUser: {...this.state.currentUser, username: resp.data['username'], userID: resp.data['id'], rememberMe}})
       this.setState({loggedIn: true})
     })
+
+    // localStorage
+    localStorage.setItem('rememberMe', rememberMe);
+    localStorage.setItem('user', rememberMe ? username : '');
   }
 
   setCurrentPlayer = (player) => {

@@ -13,19 +13,26 @@ export class Login extends Component {
         password: null,
         firstName: null,
         lastName: null,
-        redirect: null
+        redirect: null,
+        rememberMe: false
     }
 
     handleChange = (event) => {
         // console.log(event.target.value)
-        this.setState({[event.target.name]: event.target.value});
+        // this.setState({[event.target.name]: event.target.value});
+
+        // refactor to handle remember me button and localStorage
+        const input = event.target;
+        console.log(input)
+        const value = input.type === 'checkbox' ? input.checked : input.value
+
+        this.setState({[input.name]: value});
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
-        // console.log('username', this.state.username);
-        // console.log('password', this.state.password);
-        this.props.logIn(this.state.username)
+
+        this.props.logIn(this.state.username, this.state.rememberMe)
         this.setState({redirect: '/homepage'})
 
         console.log('log in')
@@ -70,7 +77,7 @@ export class Login extends Component {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Remember Me" />
+                    <Form.Check type="checkbox" name='rememberMe' label="Remember Me" onChange={this.handleChange} />
                 </Form.Group>
 
                 <Button variant="primary" type="submit" onClick={(event) => this.handleSubmit(event)} >
