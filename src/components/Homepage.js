@@ -67,3 +67,11 @@ export class Homepage extends Component {
 }
 
 export default Homepage
+
+/*
+TODO:
+- Look into updating the list of players
+    - Possibly change from NavLink's to using redirect
+- Draft
+    - Remove Draft component and implement features on homepage
+*/
