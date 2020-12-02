@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import CreateTeam from './CreateTeam.js';
-import Draft from './Draft.js';
+// import Draft from './Draft.js';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import Timer from './Timer.js';
@@ -25,9 +25,9 @@ export class Homepage extends Component {
     }
 
     draftPlayers = () => {
-        // when called choose 2 random players from this.state.players and add them to the npcTeams
-        const randomPlayer1 = this.state.availablePlayers[Math.floor(Math.random() * this.state.availablePlayers.length)];
-        const randomPlayer2 = this.state.availablePlayers[Math.floor(Math.random() * this.state.availablePlayers.length)];
+        // when called choose 2 random players from this.state.allPlayers and add them to the npcTeams
+        const randomPlayer1 = this.state.allPlayers[Math.floor(Math.random() * this.state.allPlayers.length)];
+        const randomPlayer2 = this.state.allPlayers[Math.floor(Math.random() * this.state.allPlayers.length)];
         console.log('random player 1:', randomPlayer1)
         console.log('random player 2:', randomPlayer2)
         
@@ -47,10 +47,9 @@ export class Homepage extends Component {
             <div>
                 <div>
                     <h1>Homepage</h1>
-                    {this.state.showTimer ? <Draft /> : null}
                     <h2>Username: {this.props.currentUser.username}</h2>
                     <h2>Team Name: {this.props.userTeam.isCreated ? this.props.userTeam.name : null}</h2>
-                    <Timer />
+                    <Timer draftPlayers={this.draftPlayers} />
                 </div>
                 <div>
                     <h2>Players</h2>

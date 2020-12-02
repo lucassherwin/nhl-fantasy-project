@@ -23,7 +23,7 @@ export class Login extends Component {
 
         // refactor to handle remember me button and localStorage
         const input = event.target;
-        console.log(input)
+        // console.log(input)
         const value = input.type === 'checkbox' ? input.checked : input.value
 
         this.setState({[input.name]: value});

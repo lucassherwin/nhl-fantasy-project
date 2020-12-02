@@ -35,8 +35,10 @@ class App extends Component {
   componentDidMount() {
     const rememberMe = localStorage.getItem('rememberMe') === 'true';
     const username = rememberMe ? localStorage.getItem('user') : '';
+    const userID = rememberMe ? localStorage.getItem('userID') : '';
     // const userID = rememberMe ? localStorage.getItem('userID') : '';
-    this.setState({currentUser: {...this.state.currentUser, username, rememberMe}});
+    this.setState({currentUser: {...this.state.currentUser, username, rememberMe, userID}});
+    this.setState({loggedIn: rememberMe});
   }
 
   logIn = (username, rememberMe) => {
@@ -48,11 +50,22 @@ class App extends Component {
     .then(resp => {
       this.setState({currentUser: {...this.state.currentUser, username: resp.data['username'], userID: resp.data['id'], rememberMe}})
       this.setState({loggedIn: true})
-    })
+      // local storage
+      localStorage.setItem('rememberMe', rememberMe);
+      localStorage.setItem('user', rememberMe ? username : '');
+      localStorage.setItem('userID', rememberMe ? this.state.currentUser.userID : '');
 
-    // localStorage
-    localStorage.setItem('rememberMe', rememberMe);
-    localStorage.setItem('user', rememberMe ? username : '');
+      // get the users team
+      this.getUserTeam(this.state.currentUser.userID)
+    })
+  }
+
+  getUserTeam = (userID) => {
+    // gets all the teams
+    // currently this just gets the first team in the backend (should only be one per user)
+    // can be changed and expanded if multiple users is ever implemented
+    axios.get('http://localhost:3001/teams')
+    .then(resp => this.setState({userTeam: {...this.state.userTeam, name: resp.data[0]['name'], location: resp.data[0]['location'], isCreated: true}}))
   }
 
   setCurrentPlayer = (player) => {
