@@ -26,7 +26,8 @@ class App extends Component {
       team: [],
       name: '',
       location: '',
-      isCreated: false
+      isCreated: false,
+      teamID: null
     },
     npcTeam1: [],
     npcTeam2: [],
@@ -39,6 +40,13 @@ class App extends Component {
     // const userID = rememberMe ? localStorage.getItem('userID') : '';
     this.setState({currentUser: {...this.state.currentUser, username, rememberMe, userID}});
     this.setState({loggedIn: rememberMe});
+
+    // gets the user team
+    // this is called no matter what -- assumption being that a user will create a team otherwise there wont be any team in the backend
+    // thus we can call this no matter what
+    // eventually update to only get team when user logs in
+    // get specific users team
+    this.getUserTeam();
   }
 
   logIn = (username, rememberMe) => {
@@ -56,16 +64,16 @@ class App extends Component {
       localStorage.setItem('userID', rememberMe ? this.state.currentUser.userID : '');
 
       // get the users team
-      this.getUserTeam(this.state.currentUser.userID)
+      // this.getUserTeam()
     })
   }
 
-  getUserTeam = (userID) => {
+  getUserTeam = () => {
     // gets all the teams
     // currently this just gets the first team in the backend (should only be one per user)
     // can be changed and expanded if multiple users is ever implemented
     axios.get('http://localhost:3001/teams')
-    .then(resp => this.setState({userTeam: {...this.state.userTeam, name: resp.data[0]['name'], location: resp.data[0]['location'], isCreated: true}}))
+    .then(resp => this.setState({userTeam: {...this.state.userTeam, name: resp.data[0]['name'], location: resp.data[0]['location'], isCreated: true, teamID: resp.data[0]['id']}}))
   }
 
   setCurrentPlayer = (player) => {
@@ -77,7 +85,15 @@ class App extends Component {
     let teamArr = this.state.userTeam.team
     teamArr.push(player)
 
+    // save to backend
+    console.log('teamID: ', this.state.userTeam.teamID, 'playerID:', this.state.currentPlayer.id);
+
     this.setState({userTeam: {...this.state.userTeam, team: teamArr}})
+    axios.post('http://localhost:3001/player_team', {
+      team_id: this.state.userTeam.teamID,
+      player_id: this.state.currentPlayer.id
+    })
+    .then(resp => console.log(resp.data))
     alert(`${player.name} has been added to your team`)
     //this will set userTeam
   }
