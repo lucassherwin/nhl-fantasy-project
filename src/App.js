@@ -46,10 +46,15 @@ class App extends Component {
     // thus we can call this no matter what
     // eventually update to only get team when user logs in
     // get specific users team
-    this.getUserTeam();
+    // this.getUserTeam();
   }
 
-  logIn = (username, rememberMe) => {
+  logIn = async (username, rememberMe) => {
+    let user = await this.logInUser(username, rememberMe);
+    user.then(console.log({user}))
+  }
+
+  logInUser = async (username, rememberMe) => {
     console.log('in logIn userObj', username);
     // this.setState({loggedIn: true});
     // this.setState({currentUser: username, loggedIn: true});
@@ -64,16 +69,20 @@ class App extends Component {
       localStorage.setItem('userID', rememberMe ? this.state.currentUser.userID : '');
 
       // get the users team
-      // this.getUserTeam()
+      this.getUserTeam(resp.data['id'])
     })
   }
 
-  getUserTeam = () => {
+  getUserTeam = async (id) => {
+    console.log({ id })
     // gets all the teams
     // currently this just gets the first team in the backend (should only be one per user)
     // can be changed and expanded if multiple users is ever implemented
-    axios.get('http://localhost:3001/teams')
-    .then(resp => this.setState({userTeam: {...this.state.userTeam, name: resp.data[0]['name'], location: resp.data[0]['location'], isCreated: true, teamID: resp.data[0]['id']}}))
+    let userTeam;
+    await axios.get('http://localhost:3001/teams')
+    // .then(resp => this.setState({userTeam: {...this.state.userTeam, name: resp.data[0]['name'], location: resp.data[0]['location'], isCreated: true, teamID: resp.data[0]['id']}}))
+    .then(resp => userTeam = resp.data.find(t => t.user_id === id))
+    .then(console.log({userTeam}))
   }
 
   setCurrentPlayer = (player) => {

@@ -13,7 +13,7 @@ export class Homepage extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.userTeam)
+        // console.log(this.props.userTeam)
         axios.get('http://localhost:3001/players')
         .then(resp => this.setState({allPlayers: resp.data}))
     }
