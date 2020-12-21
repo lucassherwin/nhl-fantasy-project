@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useImperativeHandle} from 'react';
 import './App.css';
 import Login from './components/Login.js';
 import Homepage from './components/Homepage.js';
@@ -16,19 +16,26 @@ import axios from 'axios';
 class App extends Component {
   state = {
     loggedIn: false,
-    currentUser: {
-      username: null,
-      userID: null,
-      rememberMe: false
-    },
+    // currentUser: {
+    //   username: null,
+    //   userID: null,
+    //   rememberMe: false
+    // },
+    currentUser: null,
     currentPlayer: null,
     userTeam: {
-      team: [],
-      name: '',
-      location: '',
-      isCreated: false,
-      teamID: null
+      name: null,
+      location: null,
+      teamID: null,
+      players: []
     },
+    // userTeam: {
+    //   team: [],
+    //   name: '',
+    //   location: '',
+    //   isCreated: false,
+    //   teamID: null
+    // },
     npcTeam1: [],
     npcTeam2: [],
   }
@@ -40,50 +47,67 @@ class App extends Component {
     // const userID = rememberMe ? localStorage.getItem('userID') : '';
     this.setState({currentUser: {...this.state.currentUser, username, rememberMe, userID}});
     this.setState({loggedIn: rememberMe});
-
-    // gets the user team
-    // this is called no matter what -- assumption being that a user will create a team otherwise there wont be any team in the backend
-    // thus we can call this no matter what
-    // eventually update to only get team when user logs in
-    // get specific users team
-    // this.getUserTeam();
   }
 
-  logIn = async (username, rememberMe) => {
-    let user = await this.logInUser(username, rememberMe);
-    user.then(console.log({user}))
+  logIn = async(username, rememberMe) => {
+    // get the user
+    let user = await this.getUser(username);
+    // get all the teams
+    let teams = await this.getUserTeam(user);
+    // find the team with the correct user_id
+    let team = teams.data.find(team => team.user_id === user.data.id);
+    
+    // set local storage
+    localStorage.setItem('rememberMe', rememberMe);
+    localStorage.setItem('user', rememberMe ? username : '');
+    localStorage.setItem('userID', rememberMe ? user.data.id : '');
+
+    // set state
+    this.setState({currentUser: user.data});
+    // this.setState({userTeam: {...this.state.useerTeam, team}});
+    this.setState({userTeam: {...this.state.userTeam, name: team['name'], location: team['location'], teamID: team['id']}})
+
+    console.log(this.state.currentUser, this.state.userTeam);
   }
 
-  logInUser = async (username, rememberMe) => {
-    console.log('in logIn userObj', username);
-    // this.setState({loggedIn: true});
-    // this.setState({currentUser: username, loggedIn: true});
-
-    axios.post(`http://localhost:3001/login`, {username})
-    .then(resp => {
-      this.setState({currentUser: {...this.state.currentUser, username: resp.data['username'], userID: resp.data['id'], rememberMe}})
-      this.setState({loggedIn: true})
-      // local storage
-      localStorage.setItem('rememberMe', rememberMe);
-      localStorage.setItem('user', rememberMe ? username : '');
-      localStorage.setItem('userID', rememberMe ? this.state.currentUser.userID : '');
-
-      // get the users team
-      this.getUserTeam(resp.data['id'])
-    })
+  getUser = (username) => {
+    return axios.post('http://localhost:3001/login', {username})
+    // .then(resp => {return resp.data})
   }
 
-  getUserTeam = async (id) => {
-    console.log({ id })
-    // gets all the teams
-    // currently this just gets the first team in the backend (should only be one per user)
-    // can be changed and expanded if multiple users is ever implemented
-    let userTeam;
-    await axios.get('http://localhost:3001/teams')
-    // .then(resp => this.setState({userTeam: {...this.state.userTeam, name: resp.data[0]['name'], location: resp.data[0]['location'], isCreated: true, teamID: resp.data[0]['id']}}))
-    .then(resp => userTeam = resp.data.find(t => t.user_id === id))
-    .then(console.log({userTeam}))
+  getUserTeam = (user) => {
+    // console.log(user)
+    return axios.get('http://localhost:3001/teams')
+    // .then(resp => {return resp.data})
   }
+
+  // logIn = (username, rememberMe) => {
+  //   console.log('in logIn userObj', username);
+
+  //   axios.post(`http://localhost:3001/login`, {username})
+  //   .then(resp => {
+  //     this.setState({currentUser: {...this.state.currentUser, username: resp.data['username'], userID: resp.data['id'], rememberMe}})
+  //     this.setState({loggedIn: true})
+  //     // local storage
+  //     localStorage.setItem('rememberMe', rememberMe);
+  //     localStorage.setItem('user', rememberMe ? username : '');
+  //     localStorage.setItem('userID', rememberMe ? this.state.currentUser.userID : '');
+
+  //     // get the users team
+  //   })
+  // }
+
+  // getUserTeam = () => {
+  //   // gets all the teams
+  //   // currently this just gets the first team in the backend (should only be one per user)
+  //   // can be changed and expanded if multiple users is ever implemented
+  //   let team;
+  //   axios.get('http://localhost:3001/teams')
+  //   // .then(resp => this.setState({userTeam: {...this.state.userTeam, name: resp.data[0]['name'], location: resp.data[0]['location'], isCreated: true, teamID: resp.data[0]['id']}}))
+  //   .then(resp => team = resp.data)
+  //   return team;
+  // }
+
 
   setCurrentPlayer = (player) => {
     console.log(player)
