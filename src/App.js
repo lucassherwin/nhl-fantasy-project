@@ -23,13 +23,14 @@ class App extends Component {
     // },
     currentUser: null,
     currentPlayer: null,
-    userTeam: {
-      team: [],
-      name: '',
-      location: '',
-      isCreated: false,
-      teamID: null
-    },
+    // userTeam: {
+    //   players: null,
+    //   name: '',
+    //   location: '',
+    //   isCreated: false,
+    //   teamID: null
+    // },
+    userTeam: null,
     npcTeam1: [],
     npcTeam2: [],
   }
@@ -48,8 +49,10 @@ class App extends Component {
     let user = await this.getUser(username);
     // get all the teams
     let teams = await this.getUserTeam(user);
+    teams = teams.data
+    // console.log(teams)
     // find the team with the correct user_id
-    let team = teams.data.find(team => team.user_id === user.data.id);
+    let team = teams.find(team => team.team.user_id === user.data.id);
     
     // set local storage
     localStorage.setItem('rememberMe', rememberMe);
@@ -57,11 +60,12 @@ class App extends Component {
     localStorage.setItem('userID', rememberMe ? user.data.id : '');
 
     // set state
+    this.setState({loggedIn: true});
     this.setState({currentUser: user.data});
-    // this.setState({userTeam: {...this.state.useerTeam, team}});
-    this.setState({userTeam: {...this.state.userTeam, name: team['name'], location: team['location'], isCreated: true, teamID: team['id']}})
+    this.setState({userTeam: team});
+    // this.setState({userTeam: {...this.state.userTeam, name: team['name'], location: team['location'], isCreated: true, teamID: team['id'], players: team['players']}})
 
-    console.log(this.state.currentUser, this.state.userTeam);
+    console.log(this.state.userTeam);
   }
 
   getUser = (username) => {
@@ -81,25 +85,27 @@ class App extends Component {
   }
 
   addPlayerToUserTeam = (player) => {
-    let teamArr = this.state.userTeam.team
+    let teamArr = this.state.userTeam.players
     teamArr.push(player)
 
     // save to backend
-    console.log('teamID: ', this.state.userTeam.teamID, 'playerID:', this.state.currentPlayer.id);
+    console.log('teamID: ', this.state.userTeam.team.teamID, 'playerID:', this.state.currentPlayer.id);
 
-    this.setState({userTeam: {...this.state.userTeam, team: teamArr}})
+    this.setState({userTeam: {...this.state.userTeam, players: teamArr}})
     axios.post('http://localhost:3001/player_team', {
-      team_id: this.state.userTeam.teamID,
+      team_id: this.state.userTeam.team.teamID,
       player_id: this.state.currentPlayer.id
     })
     .then(resp => console.log(resp.data))
     alert(`${player.name} has been added to your team`)
-    //this will set userTeam
   }
 
-  createUserTeam = (event, name, location) => {
-    console.log('create team', name, location)
-    this.setState({userTeam: {...this.state.userTeam, name: name, location: location, isCreated: !this.state.userTeam.isCreated}})
+  createUserTeam = (teamData) => {
+    console.log(teamData)
+    this.setState({userTeam: teamData})
+    // axios.get('http://localhost:3001/teams')
+    // .then(resp => console.log(resp))
+    // this.setState({userTeam: {...this.state.userTeam.team, name: name, location: location, isCreated: !this.state.userTeam.isCreated}})
   }
 
   setNPCTeams = (player1, player2) => {

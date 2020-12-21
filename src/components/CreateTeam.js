@@ -20,10 +20,11 @@ export class CreateTeam extends Component {
         axios.post(`http://localhost:3001/teams`, {
             name: this.state.name,
             location: this.state.location,
-            user_id: this.props.currentUser.userID
+            user_id: this.props.currentUser.id
         })
-        .then(resp => this.props.createUserTeam(event, resp.data.name, resp.data.location), this.setState({redirect: '/myteam'}))
-        // this.props.createUserTeam(event, this.state.name, this.state.location)
+        .then(resp => this.props.createUserTeam(resp.data), this.setState({redirect: '/myteam'}))
+        // this.props.createUserTeam(this.state.name, this.state.location)
+        // this.setState({redirect: '/myteam'})
     }
 
     render() {

@@ -13,7 +13,7 @@ export class Homepage extends Component {
     }
 
     componentDidMount() {
-        // console.log(this.props.userTeam)
+        // gets list of all players from backend
         axios.get('http://localhost:3001/players')
         .then(resp => this.setState({allPlayers: resp.data}))
     }
@@ -49,7 +49,7 @@ export class Homepage extends Component {
                 <div>
                     <h1>Homepage</h1>
                     <h2>Username: {this.props.currentUser.username}</h2>
-                    <h2>Team Name: {this.props.userTeam.isCreated ? this.props.userTeam.name : null}</h2>
+                    <h2>Team Name: {this.props.userTeam ? this.props.userTeam.team.name : null}</h2>
                     <Timer draftPlayers={this.draftPlayers} />
                 </div>
                 <div>

@@ -39,7 +39,7 @@ export class MyTeam extends Component {
 
     componentDidMount() {
         this.getTeamTotals()
-        console.log(this.state)
+        // console.log(this.state)
     }
 
 
