@@ -24,18 +24,12 @@ class App extends Component {
     currentUser: null,
     currentPlayer: null,
     userTeam: {
-      name: null,
-      location: null,
-      teamID: null,
-      players: []
+      team: [],
+      name: '',
+      location: '',
+      isCreated: false,
+      teamID: null
     },
-    // userTeam: {
-    //   team: [],
-    //   name: '',
-    //   location: '',
-    //   isCreated: false,
-    //   teamID: null
-    // },
     npcTeam1: [],
     npcTeam2: [],
   }
@@ -65,7 +59,7 @@ class App extends Component {
     // set state
     this.setState({currentUser: user.data});
     // this.setState({userTeam: {...this.state.useerTeam, team}});
-    this.setState({userTeam: {...this.state.userTeam, name: team['name'], location: team['location'], teamID: team['id']}})
+    this.setState({userTeam: {...this.state.userTeam, name: team['name'], location: team['location'], isCreated: true, teamID: team['id']}})
 
     console.log(this.state.currentUser, this.state.userTeam);
   }
@@ -80,34 +74,6 @@ class App extends Component {
     return axios.get('http://localhost:3001/teams')
     // .then(resp => {return resp.data})
   }
-
-  // logIn = (username, rememberMe) => {
-  //   console.log('in logIn userObj', username);
-
-  //   axios.post(`http://localhost:3001/login`, {username})
-  //   .then(resp => {
-  //     this.setState({currentUser: {...this.state.currentUser, username: resp.data['username'], userID: resp.data['id'], rememberMe}})
-  //     this.setState({loggedIn: true})
-  //     // local storage
-  //     localStorage.setItem('rememberMe', rememberMe);
-  //     localStorage.setItem('user', rememberMe ? username : '');
-  //     localStorage.setItem('userID', rememberMe ? this.state.currentUser.userID : '');
-
-  //     // get the users team
-  //   })
-  // }
-
-  // getUserTeam = () => {
-  //   // gets all the teams
-  //   // currently this just gets the first team in the backend (should only be one per user)
-  //   // can be changed and expanded if multiple users is ever implemented
-  //   let team;
-  //   axios.get('http://localhost:3001/teams')
-  //   // .then(resp => this.setState({userTeam: {...this.state.userTeam, name: resp.data[0]['name'], location: resp.data[0]['location'], isCreated: true, teamID: resp.data[0]['id']}}))
-  //   .then(resp => team = resp.data)
-  //   return team;
-  // }
-
 
   setCurrentPlayer = (player) => {
     console.log(player)
