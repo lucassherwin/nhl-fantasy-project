@@ -25,7 +25,7 @@ export class MyTeam extends Component {
         let points = this.state.points;
         let hits = this.state.hits;
 
-        this.props.userTeam.team.map((player) => (
+        this.props.userTeam.players.map((player) => (
             goals += player.goals,
             assists += player.assists,
             ppg += player.ppg,
@@ -39,7 +39,7 @@ export class MyTeam extends Component {
 
     componentDidMount() {
         this.getTeamTotals()
-        console.log(this.state)
+        // console.log(this.state)
     }
 
 
@@ -64,11 +64,11 @@ export class MyTeam extends Component {
         }
         return (
             <div>
-                <h1>{this.props.userTeam.name}</h1>
+                <h1>{this.props.userTeam.team.name}</h1>
                 <div>
-                {this.props.userTeam.team.length !== 0 ? <h2>Players:</h2> : null}
+                {this.props.userTeam.players.length !== 0 ? <h2>Players:</h2> : null}
                     <ul>
-                        {this.props.userTeam.team.length !== 0 ? this.props.userTeam.team.map((player, index) => (
+                        {this.props.userTeam.players.length !== 0 ? this.props.userTeam.players.map((player, index) => (
                             <li key={index}>{player.name}</li>
                         )) : null}
                     </ul>

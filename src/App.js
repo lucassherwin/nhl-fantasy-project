@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useImperativeHandle} from 'react';
 import './App.css';
 import Login from './components/Login.js';
 import Homepage from './components/Homepage.js';
@@ -16,18 +16,21 @@ import axios from 'axios';
 class App extends Component {
   state = {
     loggedIn: false,
-    currentUser: {
-      username: null,
-      userID: null,
-      rememberMe: false
-    },
+    // currentUser: {
+    //   username: null,
+    //   userID: null,
+    //   rememberMe: false
+    // },
+    currentUser: null,
     currentPlayer: null,
-    userTeam: {
-      team: [],
-      name: '',
-      location: '',
-      isCreated: false
-    },
+    // userTeam: {
+    //   players: null,
+    //   name: '',
+    //   location: '',
+    //   isCreated: false,
+    //   teamID: null
+    // },
+    userTeam: null,
     npcTeam1: [],
     npcTeam2: [],
   }
@@ -35,24 +38,44 @@ class App extends Component {
   componentDidMount() {
     const rememberMe = localStorage.getItem('rememberMe') === 'true';
     const username = rememberMe ? localStorage.getItem('user') : '';
+    const userID = rememberMe ? localStorage.getItem('userID') : '';
     // const userID = rememberMe ? localStorage.getItem('userID') : '';
-    this.setState({currentUser: {...this.state.currentUser, username, rememberMe}});
+    this.setState({currentUser: {...this.state.currentUser, username, rememberMe, userID}});
+    this.setState({loggedIn: rememberMe});
   }
 
-  logIn = (username, rememberMe) => {
-    console.log('in logIn userObj', username);
-    // this.setState({loggedIn: true});
-    // this.setState({currentUser: username, loggedIn: true});
-
-    axios.post(`http://localhost:3001/login`, {username})
-    .then(resp => {
-      this.setState({currentUser: {...this.state.currentUser, username: resp.data['username'], userID: resp.data['id'], rememberMe}})
-      this.setState({loggedIn: true})
-    })
-
-    // localStorage
+  logIn = async(username, rememberMe) => {
+    // get the user
+    let user = await this.getUser(username);
+    // get all the teams
+    let teams = await this.getUserTeam();
+    teams = teams.data
+    // console.log(teams)
+    // find the team with the correct user_id
+    let team = teams.find(team => team.team.user_id === user.data.id);
+    
+    // set local storage
     localStorage.setItem('rememberMe', rememberMe);
     localStorage.setItem('user', rememberMe ? username : '');
+    localStorage.setItem('userID', rememberMe ? user.data.id : '');
+
+    // set state
+    this.setState({loggedIn: true});
+    this.setState({currentUser: user.data});
+    this.setState({userTeam: team});
+    // this.setState({userTeam: {...this.state.userTeam, name: team['name'], location: team['location'], isCreated: true, teamID: team['id'], players: team['players']}})
+
+    console.log(this.state.userTeam);
+  }
+
+  getUser = (username) => {
+    return axios.post('http://localhost:3001/login', {username})
+    // .then(resp => {return resp.data})
+  }
+
+  getUserTeam = () => {
+    return axios.get('http://localhost:3001/teams')
+    // .then(resp => {return resp.data})
   }
 
   setCurrentPlayer = (player) => {
@@ -60,18 +83,31 @@ class App extends Component {
     this.setState({currentPlayer: player})
   }
 
-  addPlayerToUserTeam = (player) => {
-    let teamArr = this.state.userTeam.team
-    teamArr.push(player)
-
-    this.setState({userTeam: {...this.state.userTeam, team: teamArr}})
-    alert(`${player.name} has been added to your team`)
-    //this will set userTeam
+  savePlayer = () => {
+    return axios.post('http://localhost:3001/player_team', {
+      team_id: this.state.userTeam.team.id,
+      player_id: this.state.currentPlayer.id
+    })
   }
 
-  createUserTeam = (event, name, location) => {
-    console.log('create team', name, location)
-    this.setState({userTeam: {...this.state.userTeam, name: name, location: location, isCreated: !this.state.userTeam.isCreated}})
+  addPlayerToUserTeam = async (player) => {
+    // add player in backend
+    let data = await this.savePlayer();
+    console.log({data});
+    // get the updated userTeam and update in state
+    let teams = await this.getUserTeam();
+    let userTeam = teams.data.find(team => team.team.user_id === this.state.currentUser.id)
+    console.log(userTeam);
+    this.setState({userTeam})
+    alert(`${player.name} has been added to your team`)
+  }
+
+  createUserTeam = (teamData) => {
+    console.log(teamData)
+    this.setState({userTeam: teamData})
+    // axios.get('http://localhost:3001/teams')
+    // .then(resp => console.log(resp))
+    // this.setState({userTeam: {...this.state.userTeam.team, name: name, location: location, isCreated: !this.state.userTeam.isCreated}})
   }
 
   setNPCTeams = (player1, player2) => {

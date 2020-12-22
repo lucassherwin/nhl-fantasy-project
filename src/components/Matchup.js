@@ -51,7 +51,7 @@ export class Matchup extends Component {
 
         let total = this.state.userTotals.total
 
-        this.props.userTeam.team.map((player) => (
+        this.props.userTeam.players.map((player) => (
             goals += player.goals,
             assists += player.assists,
             ppg += player.ppg,
@@ -215,7 +215,7 @@ export class Matchup extends Component {
 
                 <h3>Current User Team: {this.state.userTotals.total}</h3>
                 <ul>
-                {userTeam.team.length !== 0 ? userTeam.team.map((player, index) => (
+                {userTeam.players.length !== 0 ? userTeam.players.map((player, index) => (
                     <li key={index}>{player.name}</li>
                 )) : null}
                 </ul>
