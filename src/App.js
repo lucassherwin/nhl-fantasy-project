@@ -73,8 +73,7 @@ class App extends Component {
     // .then(resp => {return resp.data})
   }
 
-  getUserTeam = (user) => {
-    // console.log(user)
+  getUserTeam = () => {
     return axios.get('http://localhost:3001/teams')
     // .then(resp => {return resp.data})
   }
@@ -84,19 +83,26 @@ class App extends Component {
     this.setState({currentPlayer: player})
   }
 
-  addPlayerToUserTeam = (player) => {
-    let teamArr = this.state.userTeam.players
-    teamArr.push(player)
+  addPlayerToUserTeam = async (player) => {
+    // let teamArr = this.state.userTeam.players
+    // teamArr.push(player)
+    console.log(this.state.userTeam.team.id, player);
 
-    // save to backend
-    console.log('teamID: ', this.state.userTeam.team.teamID, 'playerID:', this.state.currentPlayer.id);
-
-    this.setState({userTeam: {...this.state.userTeam, players: teamArr}})
+    // to get updated team from backend
+    let userTeam;
+    
+    // add player in backend
     axios.post('http://localhost:3001/player_team', {
-      team_id: this.state.userTeam.team.teamID,
+      team_id: this.state.userTeam.team.id,
       player_id: this.state.currentPlayer.id
     })
-    .then(resp => console.log(resp.data))
+    .then(resp => {
+      console.log(resp.data)
+      userTeam = this.getUserTeam()
+    })
+
+    // set team in state
+    this.setState({userTeam})
     alert(`${player.name} has been added to your team`)
   }
 
