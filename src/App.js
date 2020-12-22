@@ -48,7 +48,7 @@ class App extends Component {
     // get the user
     let user = await this.getUser(username);
     // get all the teams
-    let teams = await this.getUserTeam(user);
+    let teams = await this.getUserTeam();
     teams = teams.data
     // console.log(teams)
     // find the team with the correct user_id
@@ -83,25 +83,21 @@ class App extends Component {
     this.setState({currentPlayer: player})
   }
 
-  addPlayerToUserTeam = async (player) => {
-    // let teamArr = this.state.userTeam.players
-    // teamArr.push(player)
-    console.log(this.state.userTeam.team.id, player);
-
-    // to get updated team from backend
-    let userTeam;
-    
-    // add player in backend
-    axios.post('http://localhost:3001/player_team', {
+  savePlayer = () => {
+    return axios.post('http://localhost:3001/player_team', {
       team_id: this.state.userTeam.team.id,
       player_id: this.state.currentPlayer.id
     })
-    .then(resp => {
-      console.log(resp.data)
-      userTeam = this.getUserTeam()
-    })
+  }
 
-    // set team in state
+  addPlayerToUserTeam = async (player) => {
+    // add player in backend
+    let data = await this.savePlayer();
+    console.log({data});
+    // get the updated userTeam and update in state
+    let teams = await this.getUserTeam();
+    let userTeam = teams.data.find(team => team.team.user_id === this.state.currentUser.id)
+    console.log(userTeam);
     this.setState({userTeam})
     alert(`${player.name} has been added to your team`)
   }
