@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useImperativeHandle} from 'react';
 import './App.css';
 import Login from './components/Login.js';
 import Homepage from './components/Homepage.js';
@@ -10,50 +10,80 @@ import Matchup from './components/Matchup.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MyTeam from './components/MyTeam.js';
 import CreateTeam from './components/CreateTeam.js';
-// import { Nav } from 'react-bootstrap';
 import axios from 'axios';
 
 class App extends Component {
   state = {
     loggedIn: false,
+
     currentUser: null,
     currentPlayer: null,
-    userTeam: {
-      team: [],
-      name: '',
-      location: '',
-      isCreated: false
-    },
+    userTeam: null,
     npcTeam1: [],
     npcTeam2: [],
   }
 
-  logIn = (username) => {
-    console.log('in logIn userObj', username);
-    // this.setState({loggedIn: true});
-    this.setState({currentUser: username, loggedIn: true});
+  componentDidMount() {
+    const rememberMe = localStorage.getItem('rememberMe') === 'true';
+    const username = rememberMe ? localStorage.getItem('user') : '';
+    const userID = rememberMe ? localStorage.getItem('userID') : '';
+    this.setState({currentUser: {...this.state.currentUser, username, rememberMe, userID}});
+    this.setState({loggedIn: rememberMe});
+  }
 
-    axios.post(`http://localhost:3001/login`, {username})
-    .then(resp => console.log(resp.data))
+  logIn = async(username, rememberMe) => {
+    // get the user
+    let user = await this.getUser(username);
+    // get all the teams
+    let teams = await this.getUserTeam();
+    teams = teams.data
+    // find the team with the correct user_id
+    let team = teams.find(team => team.team.user_id === user.data.id);
+    
+    // set local storage
+    localStorage.setItem('rememberMe', rememberMe);
+    localStorage.setItem('user', rememberMe ? username : '');
+    localStorage.setItem('userID', rememberMe ? user.data.id : '');
+
+    // set state
+    this.setState({loggedIn: true});
+    this.setState({currentUser: user.data});
+    this.setState({userTeam: team});
+
+    console.log(this.state.userTeam);
+  }
+
+  getUser = (username) => {
+    return axios.post('http://localhost:3001/login', {username})
+  }
+
+  getUserTeam = () => {
+    return axios.get('http://localhost:3001/teams')
   }
 
   setCurrentPlayer = (player) => {
-    console.log(player)
     this.setState({currentPlayer: player})
   }
 
-  addPlayerToUserTeam = (player) => {
-    let teamArr = this.state.userTeam.team
-    teamArr.push(player)
-
-    this.setState({userTeam: {...this.state.userTeam, team: teamArr}})
-    alert(`${player.name} has been added to your team`)
-    //this will set userTeam
+  savePlayer = () => {
+    return axios.post('http://localhost:3001/player_team', {
+      team_id: this.state.userTeam.team.id,
+      player_id: this.state.currentPlayer.id
+    })
   }
 
-  createUserTeam = (event, name, location) => {
-    console.log('create team', name, location)
-    this.setState({userTeam: {...this.state.userTeam, name: name, location: location, isCreated: !this.state.userTeam.isCreated}})
+  addPlayerToUserTeam = async (player) => {
+    // add player in backend
+    let data = await this.savePlayer();
+    // get the updated userTeam and update in state
+    let teams = await this.getUserTeam();
+    let userTeam = teams.data.find(team => team.team.user_id === this.state.currentUser.id)
+    this.setState({userTeam})
+    alert(`${player.name} has been added to your team`)
+  }
+
+  createUserTeam = (teamData) => {
+    this.setState({userTeam: teamData})
   }
 
   setNPCTeams = (player1, player2) => {
@@ -79,23 +109,22 @@ class App extends Component {
       <div>
         {this.state.loggedIn ? <Navbar /> : null}
         <div>
-        <Switch>
+          <Switch>
             <Route exact path='/playerPage/:id' >
               <PlayerPage setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} addPlayerToUserTeam={this.addPlayerToUserTeam}/>
-          </Route>
-          <Route exact path='/homepage' render={(props) => <Homepage {...props} setNPCTeams={this.setNPCTeams} npcTeam1={this.state.npcTeam1} 
-          npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser} setCurrentPlayer={this.setCurrentPlayer} userTeam={this.state.userTeam} 
-          createUserTeam={this.createUserTeam} />}
-          />
-          <Route exact path='/signup' component={Signup} />
-          <Route exact path='/'>
-            {this.state.loggedIn ? <Redirect to={{
-              pathname:'/homepage'
-              }} /> : <Login logIn={this.logIn} />}
-          </Route>
-          <Route exact path='/matchup' render={(props) => <Matchup {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} />} />
-          <Route exact path='/myteam' render={(props) => <MyTeam {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} />} />
-          <Route exact paht='/create' render={(props) => <CreateTeam {...props} createUserTeam={this.createUserTeam} userTeam={this.state.userTeam} /> } />
+            </Route>
+            <Route exact path='/homepage' render={(props) => <Homepage {...props} setNPCTeams={this.setNPCTeams} npcTeam1={this.state.npcTeam1} 
+            npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser} setCurrentPlayer={this.setCurrentPlayer} userTeam={this.state.userTeam} 
+            createUserTeam={this.createUserTeam} />}
+            />
+            <Route exact path='/signup' component={Signup} />
+            <Route exact path='/'>
+              {this.state.loggedIn ? <Redirect to={{pathname:'/homepage'}} /> : <Redirect to={{pathname:'/login'}} />}
+            </Route>
+            <Route exact path='/login'><Login logIn={this.logIn}/></Route>
+            <Route exact path='/matchup' render={(props) => <Matchup {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} />} />
+            <Route exact path='/myteam' render={(props) => <MyTeam {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} />} />
+            <Route exact paht='/create' render={(props) => <CreateTeam {...props} createUserTeam={this.createUserTeam} userTeam={this.state.userTeam} currentUser={this.state.currentUser} /> } />
           </Switch>
         </div>
       </div>

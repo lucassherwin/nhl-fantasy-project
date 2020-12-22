@@ -15,14 +15,11 @@ export class Login extends Component {
     }
 
     handleChange = (event) => {
-        // console.log(event.target.value)
         this.setState({[event.target.name]: event.target.value});
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
-        // console.log('username', this.state.username);
-        // console.log('password', this.state.password);
         this.props.logIn(this.state.username)
 
         console.log('log in')
@@ -35,7 +32,6 @@ export class Login extends Component {
 
     handleSignupSubmit = (event) => {
         event.preventDefault();
-        // console.log('sign up', this.state.firstName, this.state.lastName, this.state.username)
         axios.post('http://localhost:3001/signup', {
             username: this.state.username,
             firstName: this.state.firstName,
