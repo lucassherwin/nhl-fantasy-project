@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import CanvasJSReact from '../canvasjs.react';
 
-var CanvasJS = CanvasJSReact.CanvasJS;
+// var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export class PlayerPage extends Component {
@@ -26,8 +26,6 @@ export class PlayerPage extends Component {
             }]
         }
 
-        
-        
         return (
             <div>
                 <h1>Player Page</h1>

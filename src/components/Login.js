@@ -5,13 +5,16 @@ import Button from 'react-bootstrap/Button'
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
 import axios from 'axios'
+import { Redirect } from "react-router-dom";
 
 export class Login extends Component {
     state = {
         username: null,
         password: null,
         firstName: null,
-        lastName: null
+        lastName: null,
+        redirect: null,
+        rememberMe: false
     }
 
     handleChange = (event) => {
@@ -37,10 +40,14 @@ export class Login extends Component {
             firstName: this.state.firstName,
             lastName: this.state.lastName
         })
-        .then(resp => console.log(resp.data));
+        .then(resp => console.log(resp.data), this.setState({redirect: '/login'}));
     }
 
     render() {
+        if(this.state.redirect)
+        {
+            return <Redirect to={this.state.redirect} />
+        }
         let inputWidth = { width: '25%' }
         return (
             <div>
@@ -59,7 +66,7 @@ export class Login extends Component {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicCheckbox">
-                    <Form.Check type="checkbox" label="Remember Me" />
+                    <Form.Check type="checkbox" name='rememberMe' label="Remember Me" onChange={this.handleChange} />
                 </Form.Group>
 
                 <Button variant="primary" type="submit" onClick={(event) => this.handleSubmit(event)} >

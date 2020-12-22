@@ -63,5 +63,11 @@ export class Timer extends Component {
 
 export default Timer
 
+/*
+NOT GOING TO CHANGE THIS FOR NOW
+IT IS SIMPLE AND IT WORKS FOR MY CURRENT IMPLEMENTATION
+ME: 12/1/2020
+*/
+
 // source:
 // https://stackoverflow.com/questions/40885923/countdown-timer-in-react
