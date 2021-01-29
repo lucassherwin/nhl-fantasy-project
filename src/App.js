@@ -31,6 +31,10 @@ class App extends Component {
     this.setState({loggedIn: rememberMe});
   }
 
+  logOut = () => {
+    this.setState({loggedIn: false, currentUser: null, userTeam: null});
+  }
+
   logIn = async(username, rememberMe) => {
     // get the user
     let user = await this.getUser(username);
@@ -105,7 +109,7 @@ class App extends Component {
   {
     return (
       <div>
-        {this.state.loggedIn ? <Navbar /> : null}
+        {this.state.loggedIn ? <Navbar logOut={this.logOut} /> : null}
         <div>
           <Switch>
             <Route exact path='/playerPage/:id' >
