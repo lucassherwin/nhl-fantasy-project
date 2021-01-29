@@ -3,7 +3,6 @@ import './App.css';
 import Login from './components/Login.js';
 import Homepage from './components/Homepage.js';
 import { Route, Redirect, Switch } from 'react-router-dom';
-import Signup from './components/Signup.js';
 import PlayerPage from './components/PlayerPage.js'
 import Navbar from './components/Navbar.js';
 import Matchup from './components/Matchup.js';
@@ -119,7 +118,6 @@ class App extends Component {
             npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser} setCurrentPlayer={this.setCurrentPlayer} userTeam={this.state.userTeam} 
             createUserTeam={this.createUserTeam} />}
             />
-            <Route exact path='/signup' component={Signup} />
             <Route exact path='/'>
               {this.state.loggedIn ? <Redirect to={{pathname:'/homepage'}} /> : <Redirect to={{pathname:'/login'}} />}
             </Route>
