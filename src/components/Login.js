@@ -21,16 +21,10 @@ export class Login extends Component {
         this.setState({[event.target.name]: event.target.value});
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
-        this.props.logIn(this.state.username)
-
+        this.props.logIn(this.state.username);
         console.log('log in')
-    }
-
-    handleSingup = (event) => {
-        console.log(event.target.value, event.target.name);
-        this.setState({[event.target.name]: event.target.value});
     }
 
     handleSignupSubmit = (event) => {
@@ -40,7 +34,7 @@ export class Login extends Component {
             firstName: this.state.firstName,
             lastName: this.state.lastName
         })
-        .then(resp => console.log(resp.data), this.setState({redirect: '/login'}));
+        .then(resp => console.log(resp.data), this.setState({redirect: '/login'})); // after signing up -> redirect to the login page and have the user login
     }
 
     render() {
