@@ -49,9 +49,7 @@ class App extends Component {
     localStorage.setItem('userID', rememberMe ? user.data.id : '');
 
     // set state
-    this.setState({currentUser: user.data});
-    this.setState({userTeam: team});
-    this.setState({loggedIn: true});
+    this.setState({currentUser: user.data, userTeam: team, loggedIn: true});
   }
 
   getUser = (username) => {
@@ -114,17 +112,24 @@ class App extends Component {
             <Route exact path='/playerPage/:id' >
               <PlayerPage setCurrentPlayer={this.setCurrentPlayer} currentPlayer={this.state.currentPlayer} addPlayerToUserTeam={this.addPlayerToUserTeam}/>
             </Route>
-            <Route exact path='/homepage' render={(props) => <Homepage {...props} setNPCTeams={this.setNPCTeams} npcTeam1={this.state.npcTeam1} 
-            npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser} setCurrentPlayer={this.setCurrentPlayer} userTeam={this.state.userTeam} 
-            createUserTeam={this.createUserTeam} />}
-            />
+            <Route exact path='/homepage' >
+              <Homepage setNPCTeams={this.setNPCTeams} npcTeam1={this.state.npcTeam1} 
+              npcTeam2={this.state.npcTeam2} currentUser={this.state.currentUser} setCurrentPlayer={this.setCurrentPlayer} userTeam={this.state.userTeam} 
+              createUserTeam={this.createUserTeam} />
+            </Route>
             <Route exact path='/'>
               {this.state.loggedIn ? <Redirect to={{pathname:'/homepage'}} /> : <Redirect to={{pathname:'/login'}} />}
             </Route>
             <Route exact path='/login'>{this.state.loggedIn ? <Redirect to={{pathname:'/homepage'}} /> : <Login logIn={this.logIn}/>}</Route>
-            <Route exact path='/matchup' render={(props) => <Matchup {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} />} />
-            <Route exact path='/myteam' render={(props) => <MyTeam {...props} userTeam={this.state.userTeam} currentUser={this.state.currentUser} />} />
-            <Route exact paht='/create' render={(props) => <CreateTeam {...props} createUserTeam={this.createUserTeam} userTeam={this.state.userTeam} currentUser={this.state.currentUser} /> } />
+            <Route exact path='/matchup'>
+              <Matchup userTeam={this.state.userTeam} currentUser={this.state.currentUser} npcTeam1={this.state.npcTeam1} npcTeam2={this.state.npcTeam2} />
+            </Route>
+            <Route exact path='/myteam'>
+              <MyTeam userTeam={this.state.userTeam} currentUser={this.state.currentUser} />
+            </Route>
+            <Route exact paht='/create'>
+              <CreateTeam createUserTeam={this.createUserTeam} userTeam={this.state.userTeam} currentUser={this.state.currentUser} />
+            </Route>
           </Switch>
         </div>
       </div>
